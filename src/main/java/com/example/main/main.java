@@ -66,9 +66,64 @@ public class main extends Application {
                     emptyBox.setHeight(100);
                     emptyBox.setFill(Color.grayRgb(100));
                     if(posCharY[0] > 0) {
-                        //root.add(emptyBox, posCharX[0], posCharY[0]);
+                        root.add(emptyBox, posCharX[0], posCharY[0]);
+                        Rectangle mainCharM = new Rectangle(); // tworzeie gracza i wstawianie go na pozycje startowa
+                        mainCharM.setHeight(100.0);
+                        mainCharM.setWidth(100.0);
+                        mainCharM.setFill(Color.rgb(255,255,255));
                         posCharY[0]--;
-                        root.add(mainChar, posCharX[0], posCharY[0]);
+                        root.add(mainCharM, posCharX[0], posCharY[0]);
+                    }
+
+
+                }
+                if(keyEvent.getCode().equals(KeyCode.S)){
+                    Rectangle emptyBox = new Rectangle();
+                    emptyBox.setWidth(100);
+                    emptyBox.setHeight(100);
+                    emptyBox.setFill(Color.grayRgb(100));
+                    if(posCharY[0] < 4) {
+                        root.add(emptyBox, posCharX[0], posCharY[0]);
+                        Rectangle mainCharM = new Rectangle(); // tworzeie gracza i wstawianie go na pozycje startowa
+                        mainCharM.setHeight(100.0);
+                        mainCharM.setWidth(100.0);
+                        mainCharM.setFill(Color.rgb(255,255,255));
+                        posCharY[0]++;
+                        root.add(mainCharM, posCharX[0], posCharY[0]);
+                    }
+
+
+                }
+                if(keyEvent.getCode().equals(KeyCode.A)){
+                    Rectangle emptyBox = new Rectangle();
+                    emptyBox.setWidth(100);
+                    emptyBox.setHeight(100);
+                    emptyBox.setFill(Color.grayRgb(100));
+                    if(posCharX[0] > 0) {
+                        root.add(emptyBox, posCharX[0], posCharY[0]);
+                        Rectangle mainCharM = new Rectangle(); // tworzeie gracza i wstawianie go na pozycje startowa
+                        mainCharM.setHeight(100.0);
+                        mainCharM.setWidth(100.0);
+                        mainCharM.setFill(Color.rgb(255,255,255));
+                        posCharX[0]--;
+                        root.add(mainCharM, posCharX[0], posCharY[0]);
+                    }
+
+
+                }
+                if(keyEvent.getCode().equals(KeyCode.D)){
+                    Rectangle emptyBox = new Rectangle();
+                    emptyBox.setWidth(100);
+                    emptyBox.setHeight(100);
+                    emptyBox.setFill(Color.grayRgb(100));
+                    if(posCharX[0] < 4) {
+                        root.add(emptyBox, posCharX[0], posCharY[0]);
+                        Rectangle mainCharM = new Rectangle(); // tworzeie gracza i wstawianie go na pozycje startowa
+                        mainCharM.setHeight(100.0);
+                        mainCharM.setWidth(100.0);
+                        mainCharM.setFill(Color.rgb(255,255,255));
+                        posCharX[0]++;
+                        root.add(mainCharM, posCharX[0], posCharY[0]);
                     }
 
 
