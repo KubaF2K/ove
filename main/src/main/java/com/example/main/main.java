@@ -28,8 +28,6 @@ public class main extends Application {
         root.setHgap(5);
         root.setVgap(5);
 
-        int posX = ThreadLocalRandom.current().nextInt(0, 4 + 1);
-        int posY = ThreadLocalRandom.current().nextInt(0, 4 + 1); // Losowanie pozycji przeciwnika
 
         for (int i = 0; i < 5; i++) { //Zapelnianie GridPanelu "pustymi" kwadratami
             for(int j = 0; j < 5; j++) {
@@ -40,6 +38,9 @@ public class main extends Application {
                 root.add(emptyBox,j,i);
             }
         }
+
+        int posY = ThreadLocalRandom.current().nextInt(0, 4 + 1); // Losowanie pozycji przeciwnika
+        int posX = ThreadLocalRandom.current().nextInt(0, 4 + 1);
 
         Rectangle enemyBox = new Rectangle(); // Tworzenie przeciwnika i wstawianei go na pozycje wylosowane
         enemyBox.setHeight(100);
