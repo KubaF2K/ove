@@ -2,7 +2,7 @@ package com.example.main;
 
 import javafx.scene.image.Image;
 
-public class Mob extends Entity{
+public abstract class Mob extends Entity{
     private int hp,x,y;
     private int maxHp;
     public int getHp() {
@@ -16,7 +16,18 @@ public class Mob extends Entity{
         if(hp+heal>maxHp) hp=maxHp;
         else hp+=heal;
     }
-
+    public abstract void interact(int x, int y);
+    public abstract void pickup(Item item);
+    public void drop(Item item){
+        if(y!=0 && Main.entityTable[x][y-1].isEmpty()) Main.entityTable[x][y-1] = item;                         //N
+        else if(x!=8 && Main.entityTable[x+1][y].isEmpty()) Main.entityTable[x+1][y] = item;                    //E
+        else if(y!=8 && Main.entityTable[x][y+1].isEmpty()) Main.entityTable[x][y+1] = item;                    //S
+        else if(x!=0 && Main.entityTable[x-1][y].isEmpty()) Main.entityTable[x-1][y] = item;                    //W
+        else if((x!=8 && y!=0) && Main.entityTable[x+1][y-1].isEmpty()) Main.entityTable[x+1][y-1] = item;      //NE
+        else if((x!=8 && y!=8) && Main.entityTable[x+1][y+1].isEmpty()) Main.entityTable[x+1][y+1] = item;      //SE
+        else if((x!=0 && y!=8) && Main.entityTable[x-1][y+1].isEmpty()) Main.entityTable[x-1][y+1] = item;      //SW
+        else if((x!=0 && y!=0) && Main.entityTable[x-1][y-1].isEmpty()) Main.entityTable[x-1][y-1] = item;      //NW
+    }
     //Pozycja
     public int getX() {
         return x;
@@ -37,7 +48,7 @@ public class Mob extends Entity{
                 Main.entityTable[x][--y] = this;
             }
             else{
-                //TODO o bogowie walka
+                interact(x, y-1);
             }
         }
     }
@@ -48,7 +59,7 @@ public class Mob extends Entity{
                 Main.entityTable[x][++y] = this;
             }
             else{
-                //TODO o bogowie walka
+                interact(x, y+1);
             }
         }
     }
@@ -59,7 +70,7 @@ public class Mob extends Entity{
                 Main.entityTable[--x][y] = this;
             }
             else{
-                //TODO o bogowie walka
+                interact(x-1, y);
             }
         }
     }
@@ -70,7 +81,7 @@ public class Mob extends Entity{
                 Main.entityTable[++x][y] = this;
             }
             else{
-                //TODO o bogowie walka
+                interact(x+1, y);
             }
         }
     }
@@ -81,7 +92,7 @@ public class Mob extends Entity{
                 Main.entityTable[--x][--y] = this;
             }
             else{
-                //TODO o bogowie walka
+                interact(x-1, y-1);
             }
         }
     }
@@ -92,7 +103,7 @@ public class Mob extends Entity{
                 Main.entityTable[++x][--y] = this;
             }
             else{
-                //TODO o bogowie walka
+                interact(x+1, y-1);
             }
         }
     }
@@ -103,7 +114,7 @@ public class Mob extends Entity{
                 Main.entityTable[--x][++y] = this;
             }
             else{
-                //TODO o bogowie walka
+                interact(x-1, y+1);
             }
         }
     }
@@ -114,7 +125,7 @@ public class Mob extends Entity{
                 Main.entityTable[++x][++y] = this;
             }
             else{
-                //TODO o bogowie walka
+                interact(x+1, y+1);
             }
         }
     }
