@@ -49,7 +49,7 @@ public class Enemy extends Mob{
             if(Main.player.getHp()==0){
                 Main.player = null;
                 Main.entityTable[x][y] = new Entity();
-                //Game Over
+                //Main.setGameOver();
             }
         }
         else if(Main.entityTable[x][y].getClass().getSimpleName().equals("Item")) { //Zderzenie z przedmiotem
