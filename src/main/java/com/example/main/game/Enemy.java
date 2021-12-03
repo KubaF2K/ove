@@ -1,8 +1,7 @@
-package com.example.main;
+package com.example.main.game;
 
 import javafx.scene.image.Image;
 
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Random;
 public class Enemy extends Mob{
@@ -49,17 +48,17 @@ public class Enemy extends Mob{
 
     @Override
     public void interact(int x, int y) {
-        if(x==Main.player.getX() && y==Main.player.getY()){ //Zderzenie z awatarem
-            Main.player.takeDmg(getDmg());
-            if(Main.player.getHp()==0){
-                Main.player = null;
-                Main.entityTable[x][y] = new Entity();
+        if(x== Game.player.getX() && y== Game.player.getY()){ //Zderzenie z awatarem
+            Game.player.takeDmg(getDmg());
+            if(Game.player.getHp()==0){
+                Game.player = null;
+                Game.entityTable[x][y] = new Entity();
                 //Main.setGameOver();
             }
         }
-        else if(Main.entityTable[x][y].getClass().getSimpleName().equals("Item")) { //Zderzenie z przedmiotem
+        else if(Game.entityTable[x][y].getClass().getSimpleName().equals("Item")) { //Zderzenie z przedmiotem
             //{
-                Item temp = (Item) Main.entityTable[x][y];
+                Item temp = (Item) Game.entityTable[x][y];
                 teleport(x, y);
                 if (carrying != null) { //Przestawienie leżącego przedmiotu
                     drop(temp);

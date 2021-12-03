@@ -1,4 +1,4 @@
-package com.example.main;
+package com.example.main.game;
 
 import javafx.scene.image.Image;
 

@@ -1,7 +1,8 @@
 package com.example.main.models;
 
+import com.example.main.game.Item;
+
 import javax.persistence.*;
-import javax.persistence.Entity;
 
 @Entity
 @Table(name = "Item")
@@ -15,7 +16,7 @@ public class ItemModel {
     private String name;
 
     @Column(name = "sprite")
-    private String spriteLink;
+    private String spriteURL;
 
 //    @ManyToOne
 //    @JoinColumn(name = "id_element")
@@ -28,7 +29,7 @@ public class ItemModel {
     private int dmg_max;
 
     @Column(name = "type")
-    private Enum type;
+    private Item.Type type;
 
     public int getItemId() {
         return itemId;
@@ -46,12 +47,12 @@ public class ItemModel {
         this.name = name;
     }
 
-    public String getSpriteLink() {
-        return spriteLink;
+    public String getSpriteURL() {
+        return spriteURL;
     }
 
-    public void setSpriteLink(String spriteLink) {
-        this.spriteLink = spriteLink;
+    public void setSpriteURL(String spriteURL) {
+        this.spriteURL = spriteURL;
     }
 
 //    public ElementModel getElementModel() {
@@ -78,11 +79,11 @@ public class ItemModel {
         this.dmg_max = dmg_max;
     }
 
-    public Enum getType() {
+    public Item.Type getType() {
         return type;
     }
 
-    public void setType(Enum type) {
+    public void setType(Item.Type type) {
         this.type = type;
     }
 

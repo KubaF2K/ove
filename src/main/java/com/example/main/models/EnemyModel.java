@@ -1,7 +1,6 @@
 package com.example.main.models;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
 
 @Entity
 @Table(name = "Enemy")
@@ -16,7 +15,7 @@ public class EnemyModel {
     private String name;
 
     @Column(name = "sprite")
-    private String spriteLink;
+    private String spriteURL;
 
 //    @ManyToOne TODO ogarnac jak ma wygladac polacznie innych klas z element 
 //    @JoinColumn(name = "id_element")
@@ -35,7 +34,16 @@ public class EnemyModel {
     @JoinColumn(name = "id_item")
     private ItemModel itemModel;
 
-    public EnemyModel() {};
+    public EnemyModel() {}
+
+    public EnemyModel(String name, String spriteURL, int health, int dmgMin, int dmgMax, ItemModel item) {
+        this.name = name;
+        this.spriteURL = spriteURL;
+        this.health = health;
+        this.dmgMin = dmgMin;
+        this.dmgMax = dmgMax;
+        itemModel = item;
+    }
 
     public int getid_enemy() {
         return id_enemy;
@@ -53,12 +61,12 @@ public class EnemyModel {
         this.name = name;
     }
 
-    public String getSpriteLink() {
-        return spriteLink;
+    public String getSpriteURL() {
+        return spriteURL;
     }
 
-    public void setSpriteLink(String spriteLink) {
-        this.spriteLink = spriteLink;
+    public void setSpriteURL(String spriteURL) {
+        this.spriteURL = spriteURL;
     }
 
 //    public Element getElement() {
@@ -93,5 +101,11 @@ public class EnemyModel {
         this.dmgMax = dmgMax;
     }
 
+    public ItemModel getItemModel(){
+        return itemModel;
+    }
 
+    public void setItemModel(ItemModel itemModel){
+        this.itemModel = itemModel;
+    }
 }
