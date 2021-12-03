@@ -1,40 +1,22 @@
 package com.example.main;
 
 import javafx.scene.image.Image;
-
-import javax.persistence.*;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 import java.util.Random;
-@Entity
-@Table(name = "Enemy")
 public class Enemy extends Mob{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int enemyId;
-
-    @Column(name = "name")
+    static int counter=0;
+    private int enemyId = counter++;
     private String name;
-
-    @Column(name = "sprite")
-    private String spriteLink;
-
-    @ManyToOne
-    @JoinColumn(name = "id_element")
-    private Element element;
-
-    @Column(name = "health")
-    private int health;
-
-    @Column(name = "dmg_min")
-    private int dmgMin;
-
-    @Column(name = "dmg_max")
-    private int dmgMax;
-
     private Item carrying;
+    //TODO private Element element;
+    private int dmgMin, dmgMax;
 
     public Enemy(String name, Image sprite, int hp, int dmgMin, int dmgMax, int x, int y){//TODO dodać element
         super(sprite, hp, x, y);
