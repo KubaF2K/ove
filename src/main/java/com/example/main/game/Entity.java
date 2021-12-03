@@ -16,7 +16,7 @@ public class Entity {
         empty = false;
     }
     public Entity(){//Puste pole
-        sprite = new Image("file:res/img/empty.png");
+        sprite = new Image("file:res/img/emptyO.png");
         empty = true;
     }
 }

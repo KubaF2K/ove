@@ -232,7 +232,11 @@ public class Game {
                 updateInfoBox();
             }
         });
-        root.setStyle("-fx-background-color: black;");
+        root.setStyle("-fx-background-color: #282633;" +
+                "-fx-background-image: url('https://i.imgur.com/nTESCRR.png');" +
+                "-fx-background-repeat: no-repeat;" +
+                "-fx-background-size: 351px 452px;" +
+                "-fx-background-position: 103px 48px;");
         return mainScene;
     }
 }
