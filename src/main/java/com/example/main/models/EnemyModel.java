@@ -1,4 +1,4 @@
-package com.example.main;
+package com.example.main.models;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -9,8 +9,8 @@ public class EnemyModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int enemyId;
+    @Column(name = "id_enemy")
+    private int id_enemy;
 
     @Column(name = "name")
     private String name;
@@ -18,9 +18,9 @@ public class EnemyModel {
     @Column(name = "sprite")
     private String spriteLink;
 
-    @ManyToOne
-    @JoinColumn(name = "id_element")
-    private Element element;
+//    @ManyToOne TODO ogarnac jak ma wygladac polacznie innych klas z element 
+//    @JoinColumn(name = "id_element")
+//    private ElementModel elementModel;
 
     @Column(name = "health")
     private int health;
@@ -31,12 +31,18 @@ public class EnemyModel {
     @Column(name = "dmg_max")
     private int dmgMax;
 
-    public int getEnemyId() {
-        return enemyId;
+    @ManyToOne
+    @JoinColumn(name = "id_item")
+    private ItemModel itemModel;
+
+    public EnemyModel() {};
+
+    public int getid_enemy() {
+        return id_enemy;
     }
 
-    public void setEnemyId(int enemyId) {
-        this.enemyId = enemyId;
+    public void setid_enemy(int id_enemy) {
+        this.id_enemy = id_enemy;
     }
 
     public String getName() {
@@ -55,13 +61,13 @@ public class EnemyModel {
         this.spriteLink = spriteLink;
     }
 
-    public Element getElement() {
-        return element;
-    }
-
-    public void setElement(Element element) {
-        this.element = element;
-    }
+//    public Element getElement() {
+//        return element;
+//    }
+//
+//    public void setElement(Element element) {
+//        this.element = element;
+//    }
 
     public int getHealth() {
         return health;

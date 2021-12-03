@@ -1,12 +1,8 @@
 package com.example.main;
 
 import javafx.scene.image.Image;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Random;
 public class Enemy extends Mob{
