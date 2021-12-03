@@ -23,10 +23,11 @@ public class Player extends Mob{
     }
 
     public void useItem(){
-        if(getEquippedItem().getType()==Item.Type.Heal){
-            heal(getEquippedItem().getDmgMin());
-            inventory[getEquippedItemId()] = null;
-        }
+        if(getEquippedItem()!=null)
+            if(getEquippedItem().getType()==Item.Type.Heal){
+                heal(getEquippedItem().getDmgMin());
+                inventory[getEquippedItemId()] = null;
+            }
     }
 
     @Override
@@ -47,28 +48,28 @@ public class Player extends Mob{
     @Override
     public void interact(int x, int y) {
         if(Main.entityTable[x][y].getClass().getSimpleName().equals("Enemy")) { //Zderzenie z wrogiem
-            if (Main.enemies.contains((Enemy) Main.entityTable[x][y])) {
+            //if (Main.enemies.contains((Enemy) Main.entityTable[x][y])) {
                 if (getEquippedItem() != null) if (getEquippedItem().getType() == Item.Type.Weapon) {
                     ((Enemy) Main.entityTable[x][y]).takeDmg(getEquippedItem().getDmg());
                     if (((Enemy) Main.entityTable[x][y]).getHp() == 0) {
-                        Main.enemies.remove((Enemy) Main.entityTable[x][y]);
+                        //Main.enemies.remove((Enemy) Main.entityTable[x][y]);
                         if (((Enemy) Main.entityTable[x][y]).getCarrying() == null)
                             Main.entityTable[x][y] = new Entity();
                         else {  //Upuść przedmiot
                             Item temp = ((Enemy) Main.entityTable[x][y]).getCarrying();
                             Main.entityTable[x][y] = temp;
-                            Main.items.add(temp);
+                            //Main.items.add(temp);
                         }
                     }
                 }
-            }
+            //}
         }
         else if(Main.entityTable[x][y].getClass().getSimpleName().equals("Item")) { //Zderzenie z przedmiotem
-            if (Main.items.contains((Item) Main.entityTable[x][y])) {
+            //if (Main.items.contains((Item) Main.entityTable[x][y])) {
                 Item temp = (Item) Main.entityTable[x][y];
                 teleport(x, y);
                 pickup(temp);
-            }
+            //}
         }
     }
 }

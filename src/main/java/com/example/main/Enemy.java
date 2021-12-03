@@ -28,6 +28,10 @@ public class Enemy extends Mob{
         this.carrying = carrying;
     }
 
+    public int getId(){
+        return enemyId;
+    }
+
     public Item getCarrying() {
         return carrying;
     }
@@ -54,16 +58,16 @@ public class Enemy extends Mob{
             }
         }
         else if(Main.entityTable[x][y].getClass().getSimpleName().equals("Item")) { //Zderzenie z przedmiotem
-            if (Main.items.contains((Item) Main.entityTable[x][y])) {
+            //{
                 Item temp = (Item) Main.entityTable[x][y];
                 teleport(x, y);
                 if (carrying != null) { //Przestawienie leżącego przedmiotu
                     drop(temp);
                 } else {
                     carrying = temp;//Podniesienie przedmiotu
-                    Main.items.remove(temp);
+                    //Main.items.remove(temp);
                 }
-            }
+            //}
         }
     }
 

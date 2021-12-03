@@ -14,7 +14,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -28,10 +30,11 @@ public class Main extends Application {
 
     public static Entity[][] entityTable = new Entity[9][9]; //Główna tablica
     public static Player player; //Awatar
-    public static HashSet<Enemy> enemies = new HashSet<>(); //Zbiór wrogów
-    public static HashSet<Item> items = new HashSet<>(); //Zbiór przedmiotów na planszy
+    //public static HashSet<Enemy> enemies = new HashSet<>(); //Zbiór wrogów
+    //public static HashSet<Item> items = new HashSet<>(); //Zbiór przedmiotów na planszy
     public static int moveCounter;
     void redrawGrid(){ //Rysowanie planszy
+        mainGrid.getChildren().clear();
         for(int i=0; i<9; i++){
             for(int j=0; j<9; j++){
                 Rectangle box = new Rectangle(32, 32);
@@ -76,7 +79,7 @@ public class Main extends Application {
         do{
             newEnemyY = random.nextInt(9);
         } while(newEnemyY == player.getY());
-        enemies.add(new Enemy("chłop", new Image("file:res/img/enemy.png"), 10, 3, 5, newEnemyX, newEnemyY));
+        /*enemies.add(*/new Enemy("chłop", new Image("file:res/img/enemy.png"), 10, 3, 5, newEnemyX, newEnemyY)/*)*/;
     }
 
     void addItem() {
@@ -91,26 +94,48 @@ public class Main extends Application {
             newItemY = random.nextInt(9);
         } while(newItemY == player.getY());
         entityTable[newItemX][newItemY] = new Item("Apteczka", new Image("file:res/img/medkit.png"), 50);
-        items.add((Item) entityTable[newItemX][newItemY]);
+        //items.add((Item) entityTable[newItemX][newItemY]);
     }
 
     void moveEnemies(){
         if(player==null) return;
-        for (Enemy enemy :
-                enemies) {
-            if (enemy.getX() < player.getX()) {
-                if(enemy.getY() < player.getY()) enemy.moveDownRight();
-                else if(enemy.getY() > player.getY()) enemy.moveUpRight();
-                else enemy.moveRight();
+        List<Integer> moved = new ArrayList<>();
+        for(int i=0; i<9; i++){
+            for(int j=0; j<9; j++){
+                if(entityTable[i][j].getClass().getSimpleName().equals("Enemy")){
+                    Enemy enemy = (Enemy) entityTable[i][j];
+                    if(moved.contains(enemy.getId())) continue;
+                    if (enemy.getX() < player.getX()) {
+                        if(enemy.getY() < player.getY()) enemy.moveDownRight();
+                        else if(enemy.getY() > player.getY()) enemy.moveUpRight();
+                        else enemy.moveRight();
+                    }
+                    else if(enemy.getX() > player.getX()){
+                        if(enemy.getY() < player.getY()) enemy.moveDownLeft();
+                        else if(enemy.getY() > player.getY()) enemy.moveUpLeft();
+                        else enemy.moveLeft();
+                    }
+                    else if(enemy.getY() > player.getY()) enemy.moveUp();
+                    else enemy.moveDown();
+                    moved.add(enemy.getId());
+                }
             }
-            else if(enemy.getX() > player.getX()){
-                if(enemy.getY() < player.getY()) enemy.moveDownLeft();
-                else if(enemy.getY() > player.getY()) enemy.moveUpLeft();
-                else enemy.moveLeft();
-            }
-            else if(enemy.getY() > player.getY()) enemy.moveUp();
-            else enemy.moveDown();
         }
+//        for (Enemy enemy :
+//                enemies) {
+//            if (enemy.getX() < player.getX()) {
+//                if(enemy.getY() < player.getY()) enemy.moveDownRight();
+//                else if(enemy.getY() > player.getY()) enemy.moveUpRight();
+//                else enemy.moveRight();
+//            }
+//            else if(enemy.getX() > player.getX()){
+//                if(enemy.getY() < player.getY()) enemy.moveDownLeft();
+//                else if(enemy.getY() > player.getY()) enemy.moveUpLeft();
+//                else enemy.moveLeft();
+//            }
+//            else if(enemy.getY() > player.getY()) enemy.moveUp();
+//            else enemy.moveDown();
+//        }
         moveCounter++;
         if(moveCounter%12 == 0)
             addEnemies();
@@ -129,13 +154,14 @@ public class Main extends Application {
         invGrid = new HBox(5);
         infoBox = new VBox(5);
 
-        for (int i = 0; i < entityTable[0].length; i++) { //Wypełnienie tabeli pustymi obiektami TODO Entity
+        for (int i = 0; i < entityTable[0].length; i++) { //Wypełnienie tabeli pustymi obiektami
             for (int j = 0; j < entityTable[0].length; j++) {
                 entityTable[i][j] = new Entity();
             }
         }
         player = new Player(new Image("file:res/img/player.png"), 100);
-        player.pickup(new Item("Miecz", new Image("file:res/img/sword.png"), 5, 10));
+        Item startWpn = new Item("Miecz", new Image("file:res/img/sword.png"), 5, 10);
+        player.pickup(startWpn);
         hpText = new Text("HP: "+player.getHp());
         hpText.setFill(Color.WHITE);
         itemText = new Text(player.getEquippedItem().getName()+"\nObrażenia: "+player.getEquippedItem().getDmgMin()+"-"+player.getEquippedItem().getDmgMax());
