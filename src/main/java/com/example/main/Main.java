@@ -12,31 +12,38 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class Main extends Application{
+    private static Scene mainScene;
+    private static Stage mainStage;
     @Override
     public void start(Stage stage) {
+        mainStage = stage;
         VBox root = new VBox(10);
         root.setAlignment(Pos.CENTER);
         Label title = new Label("Gra");
         Button btnGame = new Button("Gra");
         btnGame.setOnAction(actionEvent -> {
             Scene gameScene = Game.getScene();
-            stage.centerOnScreen();
-            stage.setResizable(false);
-            stage.setTitle("Waow");
-            stage.setScene(gameScene);
+            mainStage.centerOnScreen();
+            mainStage.setResizable(false);
+            mainStage.setTitle("Waow");
+            mainStage.setScene(gameScene);
         });
         Button btnEditor = new Button("Edytor");
         btnEditor.setOnAction(actionEvent -> {
             Scene editorScene = Editor.getScene();
-            stage.setTitle("Edytor");
-            stage.setScene(editorScene);
+            mainStage.setTitle("Edytor");
+            mainStage.setScene(editorScene);
         });
         Button btnExit = new Button("Wyjście");
         btnExit.setOnAction(actionEvent -> Platform.exit());
         root.getChildren().addAll(title, btnGame, btnEditor, btnExit);
-        Scene scene = new Scene(root, 640, 480);
-        stage.setScene(scene);
-        stage.show();
+        mainScene = new Scene(root, 640, 480);
+        mainStage.setScene(mainScene);
+        mainStage.show();
+    }
+
+    public static void resetScene(){
+        mainStage.setScene(mainScene);
     }
 
     public static void main(String[] args) {

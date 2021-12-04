@@ -3,10 +3,11 @@ package com.example.main.models;
 import com.example.main.game.Item;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "Item")
-public class ItemModel {
+public class ItemModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_item")
@@ -87,5 +88,19 @@ public class ItemModel {
         this.type = type;
     }
 
+    public ItemModel(String name, String spriteURL, int dmg_min, int dmg_max) {
+        this.name = name;
+        this.spriteURL = spriteURL;
+        this.dmg_min = dmg_min;
+        this.dmg_max = dmg_max;
+        type = Item.Type.Weapon;
+    }
+    public ItemModel(String name, String spriteURL, int healAmount){
+        this.name = name;
+        this.spriteURL = spriteURL;
+        dmg_min = dmg_max = healAmount;
+        type = Item.Type.Heal;
+    }
 
+    public ItemModel() {}
 }

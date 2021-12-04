@@ -1,10 +1,11 @@
 package com.example.main.models;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "Enemy")
-public class EnemyModel {
+public class EnemyModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,11 +46,11 @@ public class EnemyModel {
         itemModel = item;
     }
 
-    public int getid_enemy() {
+    public int getId_enemy() {
         return id_enemy;
     }
 
-    public void setid_enemy(int id_enemy) {
+    public void setId_enemy(int id_enemy) {
         this.id_enemy = id_enemy;
     }
 
