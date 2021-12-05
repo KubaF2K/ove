@@ -50,7 +50,7 @@ public class Editor {
         getEntitiesFromDb();
         //TODO temp
         enemies.add(new EnemyModel("chłop", "file:res/img/enemy.png", 10, 3, 5, null));
-        items.add(new ItemModel("Apteczka", "file:res/img/medkit.png", 50));
+        items.add(new ItemModel("Apteczka", "file:res/img/potion.png", 50));
         items.add(new ItemModel("Miecz", "file:res/img/sword.png", 5, 10));
 
         BorderPane root = new BorderPane();

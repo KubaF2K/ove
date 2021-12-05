@@ -88,7 +88,7 @@ public class Game {
         do{
             newItemY = random.nextInt(9);
         } while(newItemY == player.getY());
-        entityTable[newItemX][newItemY] = new Item("Apteczka", new Image("file:res/img/medkit.png"), 50);
+        entityTable[newItemX][newItemY] = new Item("Potion", new Image("file:res/img/potion.png"), 50);
         //items.add((Item) entityTable[newItemX][newItemY]);
     }
 
@@ -233,7 +233,7 @@ public class Game {
             }
         });
         root.setStyle("-fx-background-color: #282633;" +
-                "-fx-background-image: url('https://i.imgur.com/nTESCRR.png');" +
+                "-fx-background-image: url('file:res/img/background.png');" +
                 "-fx-background-repeat: no-repeat;" +
                 "-fx-background-size: 351px 452px;" +
                 "-fx-background-position: 103px 48px;");
