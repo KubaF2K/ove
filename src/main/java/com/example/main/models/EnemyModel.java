@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class EnemyModel implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_enemy")
     private int id_enemy;
 

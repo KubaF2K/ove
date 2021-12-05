@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Table(name = "Item")
 public class ItemModel implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_item")
     private int itemId;
 

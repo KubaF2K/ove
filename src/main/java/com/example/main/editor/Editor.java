@@ -1,5 +1,6 @@
 package com.example.main.editor;
 
+import com.example.main.DBConnection;
 import com.example.main.Main;
 import com.example.main.game.Item;
 import com.example.main.models.EnemyModel;
@@ -18,43 +19,18 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.query.Query;
-import org.hibernate.service.ServiceRegistry;
 
 public class Editor {
     private static ObservableList<EnemyModel> enemies;
     private static ObservableList<ItemModel> items;
-    private static Configuration config = new Configuration().configure("file:res/hibernate.cfg.xml");
-    private static ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(config.getProperties()).build();
-    private static SessionFactory sessionFactory = config.buildSessionFactory(serviceRegistry);
-    private static void getEntitiesFromDb(){
-        Session loadSesh = sessionFactory.openSession();
-        Query enemyQuery = loadSesh.createQuery("from EnemyModel");
-        Query itemQuery = loadSesh.createQuery("from ItemModel");
-        enemies = FXCollections.observableList(enemyQuery.list());
-        items = FXCollections.observableList(itemQuery.list());
-        loadSesh.close();
-    }
-    private static void closeDbConnection(){
-        sessionFactory.close();
-        StandardServiceRegistryBuilder.destroy(serviceRegistry);
-    }
     public static Scene getScene(){
-        config.addAnnotatedClass(EnemyModel.class);
-        config.addAnnotatedClass(ItemModel.class);
-        getEntitiesFromDb();
-        //TODO temp
-        enemies.add(new EnemyModel("chłop", "file:res/img/enemy.png", 10, 3, 5, null));
-        items.add(new ItemModel("Apteczka", "file:res/img/potion.png", 50));
-        items.add(new ItemModel("Miecz", "file:res/img/sword.png", 5, 10));
+        enemies = FXCollections.observableList(DBConnection.getEnemiesFromDb());
+        items = FXCollections.observableList(DBConnection.getItemsFromDb());
 
         BorderPane root = new BorderPane();
         TabPane tabPane = new TabPane();
+            TableView<EnemyModel> enemiesTable = new TableView<>(enemies);
+            TableView<ItemModel> itemsTable = new TableView<>(items);
         root.setCenter(tabPane);
         Scene scene = new Scene(root, 640, 480);
 
@@ -63,12 +39,10 @@ public class Editor {
             Menu mainMenu = new Menu("Menu");
                 MenuItem mainMenuMenu = new MenuItem("Wróć do menu głównego");
                     mainMenuMenu.setOnAction(e -> {
-                        closeDbConnection();
                         Main.resetScene();
                     });
                 MenuItem mainMenuExit = new MenuItem("Wyjdź");
                     mainMenuExit.setOnAction(e -> {
-                        closeDbConnection();
                         Platform.exit();
                     });
             mainMenu.getItems().addAll(mainMenuMenu, mainMenuExit);
@@ -114,11 +88,10 @@ public class Editor {
                             Button btnAdd = new Button("Dodaj");
                                 btnAdd.setOnAction(b -> {
                                     EnemyModel enemy = new EnemyModel(nameText.getText(), spriteText.getText(), Integer.parseInt(healthText.getText()), Integer.parseInt(dmgMinText.getText()), Integer.parseInt(dmgMaxText.getText()), itemComboBox.getValue());
-                                    Session saveSesh = sessionFactory.openSession();
-                                    Transaction transaction = saveSesh.beginTransaction();
-                                    saveSesh.save(enemy);
-                                    transaction.commit();
-                                    saveSesh.close();
+                                    DBConnection.addEnemy(enemy);
+                                    enemies = FXCollections.observableList(DBConnection.getEnemiesFromDb());
+                                    enemiesTable.setItems(enemies);
+                                    root.setRight(null);
                                 });
                             Button btnCancel = new Button("Anuluj");
                                 btnCancel.setOnAction(b -> root.setRight(null));
@@ -134,7 +107,6 @@ public class Editor {
         menuBar.getMenus().addAll(mainMenu, addMenu);
         root.setTop(menuBar);
 
-        TableView<EnemyModel> enemiesTable = new TableView<>(enemies);
             TableColumn<EnemyModel, Integer> enemyIdCol = new TableColumn<>("ID");
                 enemyIdCol.setCellValueFactory(new PropertyValueFactory<>("id_enemy"));
                 enemyIdCol.setMinWidth(100);
@@ -175,7 +147,6 @@ public class Editor {
             enemiesTable.getColumns().add(enemySpriteCol);
             enemiesTable.getColumns().add(enemyHPCol);
             enemiesTable.getColumns().add(enemyItemCol);
-        TableView<ItemModel> itemsTable = new TableView<>(items);
             TableColumn<ItemModel, Integer> itemIdCol = new TableColumn<>("ID");
                 itemIdCol.setCellValueFactory(new PropertyValueFactory<>("itemId"));
                 itemIdCol.setMinWidth(100);
