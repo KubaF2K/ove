@@ -1,6 +1,8 @@
 package com.example.main.game;
 
-import javafx.application.Application;
+import com.example.main.DBConnection;
+import com.example.main.models.EnemyModel;
+import com.example.main.models.ItemModel;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -10,7 +12,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +26,10 @@ public class Game {
 
     public static Entity[][] entityTable = new Entity[9][9]; //Główna tablica
     public static Player player; //Awatar
-    //public static HashSet<Enemy> enemies = new HashSet<>(); //Zbiór wrogów
-    //public static HashSet<Item> items = new HashSet<>(); //Zbiór przedmiotów na planszy
     public static int moveCounter;
+
+    private static final List<EnemyModel> enemyList = DBConnection.getEnemiesFromDb();
+    private static final List<ItemModel> itemList = DBConnection.getItemsFromDb();
     static void redrawGrid(){ //Rysowanie planszy
         mainGrid.getChildren().clear();
         for(int i=0; i<9; i++){
@@ -74,7 +76,8 @@ public class Game {
         do{
             newEnemyY = random.nextInt(9);
         } while(newEnemyY == player.getY());
-        /*enemies.add(*/new Enemy("chłop", new Image("file:res/img/enemy.png"), 10, 3, 5, newEnemyX, newEnemyY)/*)*/;
+        EnemyModel enemy = enemyList.get(random.nextInt(enemyList.size()));
+        new Enemy(enemy, newEnemyX, newEnemyY);
     }
 
     static void addItem() {
@@ -88,8 +91,8 @@ public class Game {
         do{
             newItemY = random.nextInt(9);
         } while(newItemY == player.getY());
-        entityTable[newItemX][newItemY] = new Item("Potion", new Image("file:res/img/potion.png"), 50);
-        //items.add((Item) entityTable[newItemX][newItemY]);
+        ItemModel item = itemList.get(random.nextInt(itemList.size()));
+        entityTable[newItemX][newItemY] = new Item(item);
     }
 
     static void moveEnemies(){
@@ -116,29 +119,11 @@ public class Game {
                 }
             }
         }
-//        for (Enemy enemy :
-//                enemies) {
-//            if (enemy.getX() < player.getX()) {
-//                if(enemy.getY() < player.getY()) enemy.moveDownRight();
-//                else if(enemy.getY() > player.getY()) enemy.moveUpRight();
-//                else enemy.moveRight();
-//            }
-//            else if(enemy.getX() > player.getX()){
-//                if(enemy.getY() < player.getY()) enemy.moveDownLeft();
-//                else if(enemy.getY() > player.getY()) enemy.moveUpLeft();
-//                else enemy.moveLeft();
-//            }
-//            else if(enemy.getY() > player.getY()) enemy.moveUp();
-//            else enemy.moveDown();
-//        }
         moveCounter++;
         if(moveCounter%12 == 0)
             addEnemies();
         if(moveCounter%15 == 0)
             addItem();
-    }
-    public void setGameOver(Stage stage) {
-        stage.close();
     }
     public static Scene getScene()  {
         BorderPane root = new BorderPane();
@@ -226,7 +211,13 @@ public class Game {
                     player.setEquippedItemId(8);
                 } else if (keyEvent.getCode().equals(KeyCode.DIGIT0)) {
                     player.setEquippedItemId(9);
-                } else if (keyEvent.getCode().equals(KeyCode.E)) player.useItem();
+                } else if (keyEvent.getCode().equals(KeyCode.E)){
+                    player.useItem();
+                } else if (keyEvent.getCode().equals(KeyCode.Q)){
+                    player.dropCurrentItem();
+                } else if (keyEvent.getCode().equals(KeyCode.DELETE)){
+                    player.deleteCurrentItem();
+                }
                 redrawGrid();
                 redrawInv();
                 updateInfoBox();
@@ -243,6 +234,4 @@ public class Game {
 //TODO
 // gameover
 // log z turami co sie dzieje
-// baze h2/hibrnate
-// main menu
 // wyglad

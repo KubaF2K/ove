@@ -20,6 +20,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 public class Editor {
     private static ObservableList<EnemyModel> enemies;
     private static ObservableList<ItemModel> items;
@@ -38,13 +41,9 @@ public class Editor {
         menuBar.prefWidthProperty().bind(scene.widthProperty());
             Menu mainMenu = new Menu("Menu");
                 MenuItem mainMenuMenu = new MenuItem("Wróć do menu głównego");
-                    mainMenuMenu.setOnAction(e -> {
-                        Main.resetScene();
-                    });
+                    mainMenuMenu.setOnAction(e -> Main.resetScene());
                 MenuItem mainMenuExit = new MenuItem("Wyjdź");
-                    mainMenuExit.setOnAction(e -> {
-                        Platform.exit();
-                    });
+                    mainMenuExit.setOnAction(e -> Platform.exit());
             mainMenu.getItems().addAll(mainMenuMenu, mainMenuExit);
             Menu addMenu = new Menu("Dodaj");
                 MenuItem addMenuEnemy = new MenuItem("Wróg");
@@ -71,17 +70,14 @@ public class Editor {
                         HBox itemBox = new HBox(10);
                             Label itemLabel = new Label("Upuszczany przedmiot:");
                             ComboBox<ItemModel> itemComboBox = new ComboBox<>(items);
-                            itemComboBox.setCellFactory(c -> {
-                                ListCell<ItemModel> cell = new ListCell<>(){
-                                    @Override
-                                    protected void updateItem(ItemModel s, boolean b) {
-                                        super.updateItem(s, b);
-                                        if(s!=null)
-                                            setText(s.getName());
-                                        else setText("Brak");
-                                    }
-                                };
-                                return cell;
+                            itemComboBox.setCellFactory(c -> new ListCell<>() {
+                                @Override
+                                protected void updateItem(ItemModel s, boolean b) {
+                                    super.updateItem(s, b);
+                                    if (s != null)
+                                        setText(s.getName());
+                                    else setText("Brak");
+                                }
                             });
                         itemBox.getChildren().addAll(itemLabel, itemComboBox);
                         HBox buttons = new HBox(10);
@@ -101,7 +97,69 @@ public class Editor {
                     root.setRight(sidebar);
                 });
                 MenuItem addMenuWeapon = new MenuItem("Broń");
+                addMenuWeapon.setOnAction(a -> {
+                    VBox sidebar = new VBox(10);
+                        HBox nameBox = new HBox(10);
+                            Label nameLabel = new Label("Nazwa:");
+                            TextField nameText = new TextField();
+                        nameBox.getChildren().addAll(nameLabel, nameText);
+                        HBox spriteBox = new HBox(10);
+                            Label spriteLabel = new Label("URL do grafiki:");
+                            TextField spriteText = new TextField();
+                        spriteBox.getChildren().addAll(spriteLabel, spriteText);
+                        HBox dmgBox = new HBox(10);
+                            Label dmgLabel = new Label("Obrażenia:");
+                            TextField dmgMinText = new TextField();
+                            Label dmgLine = new Label("-");
+                            TextField dmgMaxText = new TextField();
+                        dmgBox.getChildren().addAll(dmgLabel, dmgMinText, dmgLine, dmgMaxText);
+                        HBox buttons = new HBox(10);
+                            Button btnAdd = new Button("Dodaj");
+                            btnAdd.setOnAction(b -> {
+                                ItemModel item = new ItemModel(nameText.getText(), spriteText.getText(), Integer.parseInt(dmgMinText.getText()), Integer.parseInt(dmgMaxText.getText()));
+                                DBConnection.addItem(item);
+                                items = FXCollections.observableList(DBConnection.getItemsFromDb());
+                                itemsTable.setItems(items);
+                                root.setRight(null);
+                            });
+                            Button btnCancel = new Button("Anuluj");
+                            btnCancel.setOnAction(b -> root.setRight(null));
+                        buttons.getChildren().addAll(btnAdd, btnCancel);
+                    sidebar.getChildren().addAll(nameBox, spriteBox, dmgBox, buttons);
+
+                    root.setRight(sidebar);
+                });
                 MenuItem addMenuItem = new MenuItem("Przedmiot");
+                addMenuItem.setOnAction(e -> {
+                    VBox sidebar = new VBox(10);
+                        HBox nameBox = new HBox(10);
+                            Label nameLabel = new Label("Nazwa:");
+                            TextField nameText = new TextField();
+                        nameBox.getChildren().addAll(nameLabel, nameText);
+                        HBox spriteBox = new HBox(10);
+                            Label spriteLabel = new Label("URL do grafiki:");
+                            TextField spriteText = new TextField();
+                        spriteBox.getChildren().addAll(spriteLabel, spriteText);
+                        HBox hpBox = new HBox(10);
+                            Label hpLabel = new Label("Leczenie:");
+                            TextField hpText = new TextField();
+                        hpBox.getChildren().addAll(hpLabel, hpText);
+                        HBox buttons = new HBox(10);
+                            Button btnAdd = new Button("Dodaj");
+                            btnAdd.setOnAction(b -> {
+                                ItemModel item = new ItemModel(nameText.getText(), spriteText.getText(), Integer.parseInt(hpText.getText()));
+                                DBConnection.addItem(item);
+                                items = FXCollections.observableList(DBConnection.getItemsFromDb());
+                                itemsTable.setItems(items);
+                                root.setRight(null);
+                            });
+                            Button btnCancel = new Button("Anuluj");
+                            btnCancel.setOnAction(b -> root.setRight(null));
+                        buttons.getChildren().addAll(btnAdd, btnCancel);
+                    sidebar.getChildren().addAll(nameBox, spriteBox, hpBox, buttons);
+
+                    root.setRight(sidebar);
+                });
                 MenuItem addMenuElement = new MenuItem("Element");
             addMenu.getItems().addAll(addMenuEnemy, addMenuWeapon, addMenuItem, addMenuElement);
         menuBar.getMenus().addAll(mainMenu, addMenu);
@@ -115,8 +173,8 @@ public class Editor {
                 enemyNameCol.setMinWidth(100);
             TableColumn<EnemyModel, Rectangle> enemySpriteCol = new TableColumn<>("Sprite");
                 enemySpriteCol.setCellValueFactory(i -> {
-                    Image sprite = new Image(i.getValue().getSpriteURL());
                     Rectangle spriteRect = new Rectangle(32,32);
+                    Image sprite = new Image(i.getValue().getSpriteURL());
                     spriteRect.setFill(new ImagePattern(sprite));
                     return Bindings.createObjectBinding(() -> spriteRect);
                 });
@@ -191,6 +249,10 @@ public class Editor {
         itemTab.setClosable(false);
         tabPane.getTabs().addAll(enemyTab, itemTab);
         return scene;
-        //TODO dodawanie obiektów, itemy i elementy
+        //TODO
+        // elementy
+        // edytowanie
+        // usuwanie
+        // zabezpieczenia (parseInt, błędny url)
     }
 }

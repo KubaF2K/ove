@@ -1,5 +1,6 @@
 package com.example.main.game;
 
+import com.example.main.models.EnemyModel;
 import javafx.scene.image.Image;
 
 import java.util.Objects;
@@ -7,11 +8,11 @@ import java.util.Random;
 public class Enemy extends Mob{
 
     static int counter=0;
-    private int enemyId = counter++;
-    private String name;
+    private final int enemyId = counter++;
+    private final String name;
     private Item carrying;
     //TODO private Element element;
-    private int dmgMin, dmgMax;
+    private final int dmgMin, dmgMax;
 
     public Enemy(String name, Image sprite, int hp, int dmgMin, int dmgMax, int x, int y){//TODO dodać element
         super(sprite, hp, x, y);
@@ -25,6 +26,14 @@ public class Enemy extends Mob{
         this.dmgMin = dmgMin;
         this.dmgMax = dmgMax;
         this.carrying = carrying;
+    }
+    public Enemy(EnemyModel model, int x, int y){
+        super(new Image(model.getSpriteURL()), model.getHealth(), x, y);
+        name = model.getName();
+        dmgMin = model.getDmgMin();
+        dmgMax = model.getDmgMax();
+        if(model.getItemModel() != null)
+            carrying = new Item(model.getItemModel());
     }
 
     public int getId(){

@@ -1,5 +1,6 @@
 package com.example.main.game;
 
+import com.example.main.models.ItemModel;
 import javafx.scene.image.Image;
 
 import java.util.Objects;
@@ -7,14 +8,14 @@ import java.util.Random;
 
 public class Item extends Entity{
     static int counter = 0;
-    private int itemId = counter++;
+    private final int itemId = counter++;
     public enum Type{
         Heal, Weapon
     }
-    private Type type;
-    private String name;
+    private final Type type;
+    private final String name;
     //TODO private Element element;
-    private int dmgMin, dmgMax;
+    private final int dmgMin, dmgMax;
 
     public String getName() {
         return name;
@@ -43,6 +44,13 @@ public class Item extends Entity{
         this.dmgMin = dmgMin;
         this.dmgMax = dmgMax;
         type = Type.Weapon;
+    }
+    public Item(ItemModel model){
+        super(new Image(model.getSpriteURL()));
+        name = model.getName();
+        dmgMin = model.getDmg_min();
+        dmgMax = model.getDmg_max();
+        type = model.getType();
     }
 
     public int getDmg(){
