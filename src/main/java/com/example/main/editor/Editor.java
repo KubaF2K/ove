@@ -20,9 +20,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 public class Editor {
     private static ObservableList<EnemyModel> enemies;
     private static ObservableList<ItemModel> items;
@@ -200,11 +197,84 @@ public class Editor {
                     return Bindings.createObjectBinding(() -> val);
                 });
                 enemyItemCol.setMinWidth(100);
+            TableColumn<EnemyModel, HBox> enemyEditCol = new TableColumn<>("Edycja");
+                enemyEditCol.setCellFactory(e -> {
+                    HBox editBtns = new HBox(10);
+                    TableCell<EnemyModel, HBox> editCell = new TableCell<>(){
+                        @Override
+                        protected void updateItem(HBox node, boolean b) {
+                            super.updateItem(node, b);
+                            if(b) setGraphic(null);
+                            else setGraphic(editBtns);
+                        }
+                    };
+                    Button editBtn = new Button("Edytuj");
+                    editBtn.setOnAction(a -> {
+                        VBox sidebar = new VBox(10);
+                        HBox nameBox = new HBox(10);
+                        Label nameLabel = new Label("Nazwa:");
+                        TextField nameText = new TextField(editCell.getTableRow().getItem().getName());
+                        nameBox.getChildren().addAll(nameLabel, nameText);
+                        HBox spriteBox = new HBox(10);
+                        Label spriteLabel = new Label("URL do grafiki:");
+                        TextField spriteText = new TextField(editCell.getTableRow().getItem().getSpriteURL());
+                        spriteBox.getChildren().addAll(spriteLabel, spriteText);
+                        HBox healthBox = new HBox(10);
+                        Label healthLabel = new Label("Zdrowie:");
+                        TextField healthText = new TextField(String.valueOf(editCell.getTableRow().getItem().getHealth()));
+                        healthBox.getChildren().addAll(healthLabel, healthText);
+                        HBox dmgBox = new HBox(10);
+                        Label dmgLabel = new Label("Obrażenia:");
+                        TextField dmgMinText = new TextField(String.valueOf(editCell.getTableRow().getItem().getDmgMin()));
+                        Label dmgLine = new Label("-");
+                        TextField dmgMaxText = new TextField(String.valueOf(editCell.getTableRow().getItem().getDmgMax()));
+                        dmgBox.getChildren().addAll(dmgLabel, dmgMinText, dmgLine, dmgMaxText);
+                        HBox itemBox = new HBox(10);
+                        Label itemLabel = new Label("Upuszczany przedmiot:");
+                        ComboBox<ItemModel> itemComboBox = new ComboBox<>(items);
+                        itemComboBox.setCellFactory(c -> new ListCell<>() {
+                            @Override
+                            protected void updateItem(ItemModel s, boolean b) {
+                                super.updateItem(s, b);
+                                if (s != null)
+                                    setText(s.getName());
+                                else setText("Brak");
+                            }
+                        });
+                        itemComboBox.getSelectionModel().select(editCell.getTableRow().getItem().getItemModel());
+                        itemBox.getChildren().addAll(itemLabel, itemComboBox);
+                        HBox buttons = new HBox(10);
+                        Button btnAdd = new Button("Edytuj");
+                        btnAdd.setOnAction(b -> {
+                            EnemyModel enemy = new EnemyModel(nameText.getText(), spriteText.getText(), Integer.parseInt(healthText.getText()), Integer.parseInt(dmgMinText.getText()), Integer.parseInt(dmgMaxText.getText()), itemComboBox.getValue());
+                            DBConnection.editEnemy(editCell.getTableRow().getItem().getId_enemy(), enemy);
+                            enemies = FXCollections.observableList(DBConnection.getEnemiesFromDb());
+                            enemiesTable.setItems(enemies);
+                            root.setRight(null);
+                        });
+                        Button btnCancel = new Button("Anuluj");
+                        btnCancel.setOnAction(b -> root.setRight(null));
+                        buttons.getChildren().addAll(btnAdd, btnCancel);
+                        sidebar.getChildren().addAll(nameBox, spriteBox, healthBox, dmgBox, itemBox, buttons);
+                        root.setRight(sidebar);
+                    });
+                    Button delBtn = new Button("Usuń");
+                    delBtn.setOnAction(a -> {
+                        DBConnection.deleteEnemy(editCell.getTableRow().getItem().getId_enemy());
+                        enemies = FXCollections.observableList(DBConnection.getEnemiesFromDb());
+                        enemiesTable.setItems(enemies);
+                    });
+                    editBtns.getChildren().addAll(editBtn, delBtn);
+                    return editCell;
+                });
+                enemyEditCol.setMinWidth(150);
             enemiesTable.getColumns().add(enemyIdCol);
             enemiesTable.getColumns().add(enemyNameCol);
             enemiesTable.getColumns().add(enemySpriteCol);
             enemiesTable.getColumns().add(enemyHPCol);
+            enemiesTable.getColumns().add(enemyDmgCol);
             enemiesTable.getColumns().add(enemyItemCol);
+            enemiesTable.getColumns().add(enemyEditCol);
             TableColumn<ItemModel, Integer> itemIdCol = new TableColumn<>("ID");
                 itemIdCol.setCellValueFactory(new PropertyValueFactory<>("itemId"));
                 itemIdCol.setMinWidth(100);
@@ -219,7 +289,7 @@ public class Editor {
                     return Bindings.createObjectBinding(() -> rect);
                 });
                 itemSpriteCol.setMinWidth(100);
-            //TODO Elementcol
+            //TODO ElementCol
             TableColumn<ItemModel, String> itemDmgCol = new TableColumn<>("HP/Obrażenia");
                 itemDmgCol.setCellValueFactory(e -> {
                     String text = e.getValue().getType() == Item.Type.Heal ? String.valueOf(e.getValue().getDmg_max()) : e.getValue().getDmg_min()+"-"+e.getValue().getDmg_max();
@@ -237,11 +307,96 @@ public class Editor {
                     return Bindings.createObjectBinding(() -> finalText);
                 });
                 itemTypeCol.setMinWidth(100);
+            TableColumn<ItemModel, HBox> itemEditCol = new TableColumn<>("Edycja");
+                itemEditCol.setCellFactory(e -> {
+                    HBox editBtns = new HBox(10);
+                    TableCell<ItemModel, HBox> editCell = new TableCell<>(){
+                        @Override
+                        protected void updateItem(HBox hBox, boolean b) {
+                            super.updateItem(hBox, b);
+                            if(b) setGraphic(null);
+                            else setGraphic(editBtns);
+                        }
+                    };
+                    Button editBtn = new Button("Edytuj");
+                    editBtn.setOnAction(a -> {
+                        VBox sidebar = new VBox(10);
+                        switch (editCell.getTableRow().getItem().getType()){
+                            case Weapon -> {
+                                HBox nameBox = new HBox(10);
+                                Label nameLabel = new Label("Nazwa:");
+                                TextField nameText = new TextField(editCell.getTableRow().getItem().getName());
+                                nameBox.getChildren().addAll(nameLabel, nameText);
+                                HBox spriteBox = new HBox(10);
+                                Label spriteLabel = new Label("URL do grafiki:");
+                                TextField spriteText = new TextField(editCell.getTableRow().getItem().getSpriteURL());
+                                spriteBox.getChildren().addAll(spriteLabel, spriteText);
+                                HBox dmgBox = new HBox(10);
+                                Label dmgLabel = new Label("Obrażenia:");
+                                TextField dmgMinText = new TextField(String.valueOf(editCell.getTableRow().getItem().getDmg_min()));
+                                Label dmgLine = new Label("-");
+                                TextField dmgMaxText = new TextField(String.valueOf(editCell.getTableRow().getItem().getDmg_max()));
+                                dmgBox.getChildren().addAll(dmgLabel, dmgMinText, dmgLine, dmgMaxText);
+                                HBox buttons = new HBox(10);
+                                Button btnAdd = new Button("Edytuj");
+                                btnAdd.setOnAction(b -> {
+                                    ItemModel item = new ItemModel(nameText.getText(), spriteText.getText(), Integer.parseInt(dmgMinText.getText()), Integer.parseInt(dmgMaxText.getText()));
+                                    DBConnection.editItem(editCell.getTableRow().getItem().getItemId(), item);
+                                    items = FXCollections.observableList(DBConnection.getItemsFromDb());
+                                    itemsTable.setItems(items);
+                                    root.setRight(null);
+                                });
+                                Button btnCancel = new Button("Anuluj");
+                                btnCancel.setOnAction(b -> root.setRight(null));
+                                buttons.getChildren().addAll(btnAdd, btnCancel);
+                                sidebar.getChildren().addAll(nameBox, spriteBox, dmgBox, buttons);
+                            }
+                            case Heal -> {
+                                HBox nameBox = new HBox(10);
+                                Label nameLabel = new Label("Nazwa:");
+                                TextField nameText = new TextField(editCell.getTableRow().getItem().getName());
+                                nameBox.getChildren().addAll(nameLabel, nameText);
+                                HBox spriteBox = new HBox(10);
+                                Label spriteLabel = new Label("URL do grafiki:");
+                                TextField spriteText = new TextField(editCell.getTableRow().getItem().getSpriteURL());
+                                spriteBox.getChildren().addAll(spriteLabel, spriteText);
+                                HBox hpBox = new HBox(10);
+                                Label hpLabel = new Label("Leczenie:");
+                                TextField hpText = new TextField(String.valueOf(editCell.getTableRow().getItem().getDmg_max()));
+                                hpBox.getChildren().addAll(hpLabel, hpText);
+                                HBox buttons = new HBox(10);
+                                Button btnAdd = new Button("Dodaj");
+                                btnAdd.setOnAction(b -> {
+                                    ItemModel item = new ItemModel(nameText.getText(), spriteText.getText(), Integer.parseInt(hpText.getText()));
+                                    DBConnection.editItem(editCell.getTableRow().getItem().getItemId(), item);
+                                    items = FXCollections.observableList(DBConnection.getItemsFromDb());
+                                    itemsTable.setItems(items);
+                                    root.setRight(null);
+                                });
+                                Button btnCancel = new Button("Anuluj");
+                                btnCancel.setOnAction(b -> root.setRight(null));
+                                buttons.getChildren().addAll(btnAdd, btnCancel);
+                                sidebar.getChildren().addAll(nameBox, spriteBox, hpBox, buttons);
+                            }
+                        }
+                        root.setRight(sidebar);
+                    });
+                    Button deleteBtn = new Button("Usuń");
+                    deleteBtn.setOnAction(a -> {
+                        DBConnection.deleteItem(editCell.getTableRow().getItem().getItemId());
+                        items = FXCollections.observableList(DBConnection.getItemsFromDb());
+                        itemsTable.setItems(items);
+                        root.setRight(null);
+                    });
+                    editBtns.getChildren().addAll(editBtn, deleteBtn);
+                    return editCell;
+                });
             itemsTable.getColumns().add(itemIdCol);
             itemsTable.getColumns().add(itemNameCol);
             itemsTable.getColumns().add(itemSpriteCol);
             itemsTable.getColumns().add(itemDmgCol);
             itemsTable.getColumns().add(itemTypeCol);
+            itemsTable.getColumns().add(itemEditCol);
 
         Tab enemyTab = new Tab("Wrogowie", enemiesTable);
         Tab itemTab = new Tab("Przedmioty", itemsTable);

@@ -65,4 +65,18 @@ public class DBConnection {
         em.getTransaction().commit();
         em.close();
     }
+    public static void deleteEnemy(int id){
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        em.remove(em.find(EnemyModel.class, id));
+        em.getTransaction().commit();
+        em.close();
+    }
+    public static void deleteItem(int id){
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        em.remove(em.find(ItemModel.class, id));
+        em.getTransaction().commit();
+        em.close();
+    }
 }
