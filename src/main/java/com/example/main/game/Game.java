@@ -149,6 +149,7 @@ public class Game {
         hpText.setFill(Color.WHITE);
         itemText = new Text(player.getEquippedItem().getName()+"\nObrażenia: "+player.getEquippedItem().getDmgMin()+"-"+player.getEquippedItem().getDmgMax());
         itemText.setFill(Color.WHITE);
+        itemText.setWrappingWidth(85);
         infoBox.getChildren().addAll(hpText, itemText);
 
         addEnemies();
