@@ -3,8 +3,10 @@ package com.example.main.game;
 import com.example.main.DBConnection;
 import com.example.main.models.EnemyModel;
 import com.example.main.models.ItemModel;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
@@ -19,6 +21,7 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Game {
+    private static StackPane mainStack;
     private static GridPane mainGrid;
     private static HBox invGrid;
     private static Text hpText;
@@ -127,6 +130,7 @@ public class Game {
     }
     public static Scene getScene()  {
         BorderPane root = new BorderPane();
+        StackPane mainStack = new StackPane();
         mainGrid = new GridPane();
         mainGrid.setHgap(5);
         mainGrid.setVgap(5);
@@ -159,11 +163,33 @@ public class Game {
         mainGrid.setAlignment(Pos.CENTER);
         invGrid.setAlignment(Pos.CENTER);
 
-        Scene mainScene = new Scene(root, 640, 480);
+        mainStack.getChildren().add(root);
+
+        Scene mainScene = new Scene(mainStack, 640, 480);
         AtomicBoolean paused = new AtomicBoolean(false);
+        VBox pauseScreen = new VBox();
+        Text pauseTextMain = new Text("Paused\n");
+        pauseTextMain.setFill(Color.WHITE);
+        pauseTextMain.setStyle("-fx-font: 48 Minecraft;");
+
+        Text pauseTextAdd = new Text("Press esc to continue");
+        pauseTextAdd.setFill(Color.WHITE);
+        pauseTextAdd.setStyle("-fx-font: 24 Minecraft;");
+
+        pauseScreen.setAlignment(Pos.CENTER);
+        pauseScreen.getChildren().addAll(pauseTextMain, pauseTextAdd);
+        pauseScreen.setStyle("-fx-height: 480px;" +
+                "-fx-width: 680px;" +
+                "-fx-background-color: rgba(0,0,0,0.7);");
         mainScene.setOnKeyPressed(keyEvent -> {
             if(keyEvent.getCode().equals(KeyCode.ESCAPE)){
                 paused.set(!paused.get());
+                if(paused.get()) {
+                    mainStack.getChildren().add(pauseScreen);
+                }
+                else {
+                    mainStack.getChildren().remove(pauseScreen);
+                }
             } else if(!paused.get()) {
                 if (keyEvent.getCode().equals(KeyCode.UP) || keyEvent.getCode().equals(KeyCode.NUMPAD8)) {
                     player.moveUp();
