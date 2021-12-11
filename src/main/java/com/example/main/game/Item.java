@@ -1,5 +1,6 @@
 package com.example.main.game;
 
+import com.example.main.models.Element;
 import com.example.main.models.ItemModel;
 import javafx.scene.image.Image;
 
@@ -14,7 +15,7 @@ public class Item extends Entity{
     }
     private final Type type;
     private final String name;
-    //TODO private Element element;
+    private Element element;
     private final int dmgMin, dmgMax;
 
     public String getName() {
@@ -29,6 +30,9 @@ public class Item extends Entity{
     public int getDmgMax() {
         return dmgMax;
     }
+    public Element getElement() {
+        return element;
+    }
 
     //Konstruktor dla itemów leczących
     public Item(String name, Image sprite, int healAmount){
@@ -38,11 +42,19 @@ public class Item extends Entity{
         type = Type.Heal;
     }
     //Konstruktor dla broni
-    public Item(String name, Image sprite, int dmgMin, int dmgMax){//TODO Element element
+    public Item(String name, Image sprite, int dmgMin, int dmgMax){
         super(sprite);
         this.name = name;
         this.dmgMin = dmgMin;
         this.dmgMax = dmgMax;
+        type = Type.Weapon;
+    }
+    public Item(String name, Image sprite, int dmgMin, int dmgMax, Element element){
+        super(sprite);
+        this.name = name;
+        this.dmgMin = dmgMin;
+        this.dmgMax = dmgMax;
+        this.element = element;
         type = Type.Weapon;
     }
     public Item(ItemModel model){
@@ -51,6 +63,7 @@ public class Item extends Entity{
         dmgMin = model.getDmg_min();
         dmgMax = model.getDmg_max();
         type = model.getType();
+        element = model.getElement();
     }
 
     public int getDmg(){

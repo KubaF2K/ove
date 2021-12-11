@@ -3,10 +3,8 @@ package com.example.main.game;
 import com.example.main.DBConnection;
 import com.example.main.models.EnemyModel;
 import com.example.main.models.ItemModel;
-import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
@@ -31,8 +29,8 @@ public class Game {
     public static Player player; //Awatar
     public static int moveCounter;
 
-    private static final List<EnemyModel> enemyList = DBConnection.getEnemiesFromDb();
-    private static final List<ItemModel> itemList = DBConnection.getItemsFromDb();
+    private static final List<EnemyModel> enemyList = DBConnection.getEnemies();
+    private static final List<ItemModel> itemList = DBConnection.getItems();
     static void redrawGrid(){ //Rysowanie planszy
         mainGrid.getChildren().clear();
         for(int i=0; i<9; i++){

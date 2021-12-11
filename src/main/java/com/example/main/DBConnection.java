@@ -1,5 +1,6 @@
 package com.example.main;
 
+import com.example.main.models.Element;
 import com.example.main.models.EnemyModel;
 import com.example.main.models.ItemModel;
 
@@ -8,24 +9,56 @@ import java.util.List;
 
 public class DBConnection {
     private static EntityManagerFactory emf;
+
     public static EntityManager getEntityManager(){
         if(emf == null) emf = Persistence.createEntityManagerFactory("gameBasePersistence");
         return emf.createEntityManager();
     }
-    public static List<EnemyModel> getEnemiesFromDb(){
+
+    public static List<EnemyModel> getEnemies(){
         EntityManager em = getEntityManager();
         TypedQuery<EnemyModel> enemiesQuery = em.createQuery("SELECT e FROM EnemyModel e", EnemyModel.class);
         List<EnemyModel> enemies = enemiesQuery.getResultList();
         em.close();
         return enemies;
     }
-    public static List<ItemModel> getItemsFromDb(){
+    public static List<ItemModel> getItems(){
         EntityManager em = getEntityManager();
         TypedQuery<ItemModel> itemsQuery = em.createQuery("SELECT i FROM ItemModel i", ItemModel.class);
         List<ItemModel> items = itemsQuery.getResultList();
         em.close();
         return items;
     }
+    public static List<Element> getElements(){
+        EntityManager em = getEntityManager();
+        TypedQuery<Element> elementsQuery = em.createQuery("SELECT e FROM Element e", Element.class);
+        List<Element> elements = elementsQuery.getResultList();
+        em.close();
+        return elements;
+    }
+
+    public static EnemyModel getEnemy(int id){
+        EntityManager em = getEntityManager();
+        TypedQuery<EnemyModel> enemyQuery = em.createQuery("SELECT e FROM EnemyModel e WHERE e.id_enemy="+id, EnemyModel.class);
+        EnemyModel enemy = enemyQuery.getSingleResult();
+        em.close();
+        return enemy;
+    }
+    public static ItemModel getItem(int id){
+        EntityManager em = getEntityManager();
+        TypedQuery<ItemModel> itemQuery = em.createQuery("SELECT i FROM ItemModel i WHERE i.itemId="+id, ItemModel.class);
+        ItemModel item = itemQuery.getSingleResult();
+        em.close();
+        return item;
+    }
+    public static Element getElement(int id){
+        EntityManager em = getEntityManager();
+        TypedQuery<Element> elementQuery = em.createQuery("SELECT e FROM Element e WHERE e.elementId="+id, Element.class);
+        Element element = elementQuery.getSingleResult();
+        em.close();
+        return element;
+    }
+
     public static void addEnemy(EnemyModel enemy){
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
@@ -40,6 +73,14 @@ public class DBConnection {
         em.getTransaction().commit();
         em.close();
     }
+    public static void addElement(Element element){
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        em.persist(element);
+        em.getTransaction().commit();
+        em.close();
+    }
+
     public static void editEnemy(int id, EnemyModel newEnemy){
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
@@ -65,6 +106,18 @@ public class DBConnection {
         em.getTransaction().commit();
         em.close();
     }
+    public static void editElement(int id, Element newElement){
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        Element element = em.find(Element.class, id);
+        element.setName(newElement.getName());
+        element.setSpriteURL(newElement.getSpriteURL());
+        element.setWeakToId(newElement.getWeakToId());
+        element.setStrongToId(newElement.getStrongToId());
+        em.getTransaction().commit();
+        em.close();
+    }
+
     public static void deleteEnemy(int id){
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
@@ -76,6 +129,13 @@ public class DBConnection {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         em.remove(em.find(ItemModel.class, id));
+        em.getTransaction().commit();
+        em.close();
+    }
+    public static void deleteElement(int id){
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        em.remove(em.find(Element.class, id));
         em.getTransaction().commit();
         em.close();
     }

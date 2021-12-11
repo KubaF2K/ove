@@ -18,9 +18,9 @@ public class EnemyModel implements Serializable {
     @Column(name = "sprite")
     private String spriteURL;
 
-//    @ManyToOne TODO ogarnac jak ma wygladac polacznie innych klas z element 
-//    @JoinColumn(name = "id_element")
-//    private ElementModel elementModel;
+    @ManyToOne
+    @JoinColumn(name = "id_element")
+    private Element element;
 
     @Column(name = "health")
     private int health;
@@ -37,13 +37,14 @@ public class EnemyModel implements Serializable {
 
     public EnemyModel() {}
 
-    public EnemyModel(String name, String spriteURL, int health, int dmgMin, int dmgMax, ItemModel item) {
+    public EnemyModel(String name, String spriteURL, int health, int dmgMin, int dmgMax, ItemModel item, Element element) {
         this.name = name;
         this.spriteURL = spriteURL;
         this.health = health;
         this.dmgMin = dmgMin;
         this.dmgMax = dmgMax;
         itemModel = item;
+        this.element = element;
     }
 
     public int getId_enemy() {
@@ -70,13 +71,13 @@ public class EnemyModel implements Serializable {
         this.spriteURL = spriteURL;
     }
 
-//    public Element getElement() {
-//        return element;
-//    }
-//
-//    public void setElement(Element element) {
-//        this.element = element;
-//    }
+    public Element getElement() {
+        return element;
+    }
+
+    public void setElement(Element element) {
+        this.element = element;
+    }
 
     public int getHealth() {
         return health;

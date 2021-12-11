@@ -1,5 +1,6 @@
 package com.example.main.game;
 
+import com.example.main.models.Element;
 import com.example.main.models.EnemyModel;
 import javafx.scene.image.Image;
 
@@ -11,20 +12,35 @@ public class Enemy extends Mob{
     private final int enemyId = counter++;
     private final String name;
     private Item carrying;
-    //TODO private Element element;
+    private Element element;
     private final int dmgMin, dmgMax;
 
-    public Enemy(String name, Image sprite, int hp, int dmgMin, int dmgMax, int x, int y){//TODO dodać element
+    public Enemy(String name, Image sprite, int hp, int dmgMin, int dmgMax, int x, int y){
         super(sprite, hp, x, y);
         this.name = name;
         this.dmgMin = dmgMin;
         this.dmgMax = dmgMax;
     }
-    public Enemy(String name, Image sprite, int hp, int dmgMin, int dmgMax, int x, int y, Item carrying){//TODO dodać element
+    public Enemy(String name, Image sprite, int hp, int dmgMin, int dmgMax, int x, int y, Element element){
         super(sprite, hp, x, y);
         this.name = name;
         this.dmgMin = dmgMin;
         this.dmgMax = dmgMax;
+        this.element = element;
+    }
+    public Enemy(String name, Image sprite, int hp, int dmgMin, int dmgMax, int x, int y, Item carrying){
+        super(sprite, hp, x, y);
+        this.name = name;
+        this.dmgMin = dmgMin;
+        this.dmgMax = dmgMax;
+        this.carrying = carrying;
+    }
+    public Enemy(String name, Image sprite, int hp, int dmgMin, int dmgMax, int x, int y, Element element, Item carrying){
+        super(sprite, hp, x, y);
+        this.name = name;
+        this.dmgMin = dmgMin;
+        this.dmgMax = dmgMax;
+        this.element = element;
         this.carrying = carrying;
     }
     public Enemy(EnemyModel model, int x, int y){
@@ -34,6 +50,7 @@ public class Enemy extends Mob{
         dmgMax = model.getDmgMax();
         if(model.getItemModel() != null)
             carrying = new Item(model.getItemModel());
+        element = model.getElement();
     }
 
     public int getId(){
@@ -47,6 +64,20 @@ public class Enemy extends Mob{
     public int getDmg(){
         Random random = new Random();
         return random.nextInt(dmgMax-dmgMin)+dmgMin;
+    }
+
+    public void takeDmg(int dmg, Element attackingElement) {
+        if(element != null && attackingElement != null){
+            if(element.getWeakToId() == attackingElement.getElementId()){
+                takeDmg(dmg*2);
+                return;
+            }
+            if(element.getStrongToId() == attackingElement.getElementId()){
+                takeDmg(dmg/2);
+                return;
+            }
+        }
+        takeDmg(dmg);
     }
 
     @Override
@@ -66,16 +97,13 @@ public class Enemy extends Mob{
             }
         }
         else if(Game.entityTable[x][y].getClass().getSimpleName().equals("Item")) { //Zderzenie z przedmiotem
-            //{
-                Item temp = (Item) Game.entityTable[x][y];
-                teleport(x, y);
-                if (carrying != null) { //Przestawienie leżącego przedmiotu
-                    drop(temp);
-                } else {
-                    carrying = temp;//Podniesienie przedmiotu
-                    //Main.items.remove(temp);
-                }
-            //}
+            Item temp = (Item) Game.entityTable[x][y];
+            teleport(x, y);
+            if (carrying != null) { //Przestawienie leżącego przedmiotu
+                drop(temp);
+            } else {
+                carrying = temp;//Podniesienie przedmiotu
+            }
         }
     }
 

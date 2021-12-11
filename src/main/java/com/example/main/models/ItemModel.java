@@ -19,9 +19,9 @@ public class ItemModel implements Serializable {
     @Column(name = "sprite")
     private String spriteURL;
 
-//    @ManyToOne
-//    @JoinColumn(name = "id_element")
-//    private ElementModel elementModel;
+    @ManyToOne
+    @JoinColumn(name = "id_element")
+    private Element element;
 
     @Column(name = "dmg_min")
     private int dmg_min;
@@ -56,13 +56,13 @@ public class ItemModel implements Serializable {
         this.spriteURL = spriteURL;
     }
 
-//    public ElementModel getElementModel() {
-//        return elementModel;
-//    }
-//
-//    public void setElementModel(ElementModel elementModel) {
-//        this.elementModel = elementModel;
-//    }
+    public Element getElement() {
+        return element;
+    }
+
+    public void setElement(Element element) {
+        this.element = element;
+    }
 
     public int getDmg_min() {
         return dmg_min;
@@ -88,11 +88,12 @@ public class ItemModel implements Serializable {
         this.type = type;
     }
 
-    public ItemModel(String name, String spriteURL, int dmg_min, int dmg_max) {
+    public ItemModel(String name, String spriteURL, int dmg_min, int dmg_max, Element element) {
         this.name = name;
         this.spriteURL = spriteURL;
         this.dmg_min = dmg_min;
         this.dmg_max = dmg_max;
+        this.element = element;
         type = Item.Type.Weapon;
     }
     public ItemModel(String name, String spriteURL, int healAmount){

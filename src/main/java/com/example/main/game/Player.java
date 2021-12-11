@@ -58,7 +58,7 @@ public class Player extends Mob{
     public void interact(int x, int y) {
         if(Game.entityTable[x][y].getClass().getSimpleName().equals("Enemy")) { //Zderzenie z wrogiem
             if (getEquippedItem() != null) if (getEquippedItem().getType() == Item.Type.Weapon) {
-                ((Enemy) Game.entityTable[x][y]).takeDmg(getEquippedItem().getDmg());
+                ((Enemy) Game.entityTable[x][y]).takeDmg(getEquippedItem().getDmg(), getEquippedItem().getElement());
                 if (((Enemy) Game.entityTable[x][y]).getHp() == 0) {
                     if (((Enemy) Game.entityTable[x][y]).getCarrying() == null)
                         Game.entityTable[x][y] = new Entity();
