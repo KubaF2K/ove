@@ -61,6 +61,10 @@ public class Enemy extends Mob{
         return carrying;
     }
 
+    public String getName(){
+        return name;
+    }
+
     public int getDmg(){
         Random random = new Random();
         return random.nextInt(dmgMax-dmgMin)+dmgMin;
@@ -69,15 +73,23 @@ public class Enemy extends Mob{
     public void takeDmg(int dmg, Element attackingElement) {
         if(element != null && attackingElement != null){
             if(element.getWeakToId() == attackingElement.getElementId()){
+                Game.logBox.addLine("Skuteczne trafienie!");
                 takeDmg(dmg*2);
                 return;
             }
             if(element.getStrongToId() == attackingElement.getElementId()){
+                Game.logBox.addLine("Nieskuteczne trafienie...");
                 takeDmg(dmg/2);
                 return;
             }
         }
         takeDmg(dmg);
+    }
+
+    @Override
+    public void takeDmg(int dmg) {
+        super.takeDmg(dmg);
+        Game.logBox.addLine(name + " został zaatakowany za " + dmg + " obrażeń");
     }
 
     @Override

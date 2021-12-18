@@ -1,0 +1,16 @@
+.root{
+    -fx-background-color: #000;
+}
+
+.title{
+    -fx-text-fill: #fff;
+    -fx-font: 96 Minecraft;
+}
+
+.button{
+    -fx-background-image: url('file:res/img/buttonbg.png');
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-background-size: auto;
+    -fx-text-fill: #fff;
+    -fx-font: 24 Minecraft;
+}

@@ -20,20 +20,19 @@ public class Main extends Application{
     public void start(Stage stage) {
         mainStage = stage;
         VBox root = new VBox(10);
+        root.getStyleClass().add("root");
         root.setAlignment(Pos.CENTER_LEFT);
         Label title = new Label("Gra");
-        Font font = Font.loadFont("file:res/fonts/Minecraft.ttf", 24);
-
-        title.setStyle("-fx-text-fill: #fff;" +
-                "-fx-font: 96 Minecraft");
+        title.getStyleClass().add("title");
+        Font.loadFont("file:res/fonts/Minecraft.ttf", 24);
 
         Button btnGame = new Button("Start");
         btnGame.setOnAction(actionEvent -> {
             Scene gameScene = Game.getScene();
             mainStage.centerOnScreen();
-            mainStage.setResizable(false);
             mainStage.setTitle("Waow");
             mainStage.setScene(gameScene);
+            mainStage.setResizable(false);
         });
         Button btnEditor = new Button("Edit");
         btnEditor.setOnAction(actionEvent -> {
@@ -45,22 +44,13 @@ public class Main extends Application{
         btnExit.setOnAction(actionEvent -> Platform.exit());
         root.getChildren().addAll(title, btnGame, btnEditor, btnExit);
         mainScene = new Scene(root, 640, 480);
-
-        String buttonStyles = "-fx-background-image: url('file:res/img/buttonbg.png');" +
-                "-fx-background-color: rgba(0,0,0,0);" +
-                "-fx-background-size: auto;" +
-                "-fx-text-fill: #fff;" +
-                "-fx-font: 24 Minecraft";
+        mainScene.getStylesheets().add("file:res/styles/main.css");
         btnGame.setMinSize(320,40);
-        btnGame.setStyle(buttonStyles);
 
         btnEditor.setMinSize(320,40);
-        btnEditor.setStyle(buttonStyles);
 
         btnExit.setMinSize(320,40);
-        btnExit.setStyle(buttonStyles);
 
-        root.setStyle("-fx-background-color: #000;");
         mainStage.setScene(mainScene);
         mainStage.show();
     }

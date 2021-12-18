@@ -40,6 +40,18 @@ public class Player extends Mob{
     }
 
     @Override
+    public void heal(int heal) {
+        super.heal(heal);
+        Game.logBox.addLine("Uleczono " + heal + " punktów zdrowia");
+    }
+
+    @Override
+    public void takeDmg(int dmg) {
+        super.takeDmg(dmg);
+        Game.logBox.addLine("Otrzymano "+ dmg + " obrażeń");
+    }
+
+    @Override
     public void pickup(Item item){
         for (int i = 0; i <= inventory.length; i++) {
             if(i==inventory.length){    //Brak miejsca w ekwipunku, przestawienie przedmiotu
@@ -48,6 +60,7 @@ public class Player extends Mob{
             else{
                 if(inventory[i]==null) {
                     inventory[i] = item;
+                    Game.logBox.addLine("Podniesiono " + item.getName());
                     break;
                 }
             }
@@ -60,6 +73,7 @@ public class Player extends Mob{
             if (getEquippedItem() != null) if (getEquippedItem().getType() == Item.Type.Weapon) {
                 ((Enemy) Game.entityTable[x][y]).takeDmg(getEquippedItem().getDmg(), getEquippedItem().getElement());
                 if (((Enemy) Game.entityTable[x][y]).getHp() == 0) {
+                    Game.logBox.addLine(((Enemy) Game.entityTable[x][y]).getName() + " umiera!");
                     if (((Enemy) Game.entityTable[x][y]).getCarrying() == null)
                         Game.entityTable[x][y] = new Entity();
                     else {  //Upuść przedmiot

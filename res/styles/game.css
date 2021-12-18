@@ -1,0 +1,22 @@
+.root{
+    -fx-background-color: #282633;
+    -fx-background-image: url('file:res/img/background.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 351px 452px;
+    -fx-background-position: 103px 48px;
+}
+
+.pause-screen{
+    -fx-height: 480px;
+    -fx-width: 680px;
+    -fx-background-color: rgba(0,0,0,0.7);
+}
+
+.log-box .scroll-bar:vertical {
+    -fx-pref-width: 1;
+    -fx-opacity: 0;
+}
+.log-box .text-area .scroll-bar:horizontal {
+    -fx-pref-height: 1;
+    -fx-opacity: 0;
+}

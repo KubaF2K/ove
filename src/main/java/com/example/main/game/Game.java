@@ -19,11 +19,11 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Game {
-    private static StackPane mainStack;
     private static GridPane mainGrid;
     private static HBox invGrid;
     private static Text hpText;
         private static Text itemText;
+    public static LogBox logBox;
 
     public static Entity[][] entityTable = new Entity[9][9]; //Główna tablica
     public static Player player; //Awatar
@@ -134,6 +134,8 @@ public class Game {
         mainGrid.setVgap(5);
         invGrid = new HBox(5);
         VBox infoBox = new VBox(5);
+        logBox = new LogBox(5);
+        logBox.setWrapText(false);
 
         for (int i = 0; i < entityTable[0].length; i++) { //Wypełnienie tabeli pustymi obiektami
             for (int j = 0; j < entityTable[0].length; j++) {
@@ -159,12 +161,14 @@ public class Game {
         root.setCenter(mainGrid);
         root.setBottom(invGrid);
         root.setRight(infoBox);
+        root.setTop(logBox);
         mainGrid.setAlignment(Pos.CENTER);
         invGrid.setAlignment(Pos.CENTER);
 
         mainStack.getChildren().add(root);
 
         Scene mainScene = new Scene(mainStack, 640, 480);
+        mainScene.getStylesheets().add("file:res/styles/game.css");
         AtomicBoolean paused = new AtomicBoolean(false);
         VBox pauseScreen = new VBox();
         Text pauseTextMain = new Text("Paused\n");
@@ -177,9 +181,7 @@ public class Game {
 
         pauseScreen.setAlignment(Pos.CENTER);
         pauseScreen.getChildren().addAll(pauseTextMain, pauseTextAdd);
-        pauseScreen.setStyle("-fx-height: 480px;" +
-                "-fx-width: 680px;" +
-                "-fx-background-color: rgba(0,0,0,0.7);");
+        pauseScreen.getStyleClass().add("pause-screen");
         mainScene.setOnKeyPressed(keyEvent -> {
             if(keyEvent.getCode().equals(KeyCode.ESCAPE)){
                 paused.set(!paused.get());
@@ -248,15 +250,10 @@ public class Game {
                 updateInfoBox();
             }
         });
-        root.setStyle("-fx-background-color: #282633;" +
-                "-fx-background-image: url('file:res/img/background.png');" +
-                "-fx-background-repeat: no-repeat;" +
-                "-fx-background-size: 351px 452px;" +
-                "-fx-background-position: 103px 48px;");
+        root.getStyleClass().add("root");
         return mainScene;
     }
 }
 //TODO
 // gameover
-// log z turami co sie dzieje
 // wyglad
