@@ -682,8 +682,11 @@ public class Editor {
     public static boolean checkUrlValidation(String url) {
         try {
             Image testImage = new Image(url);
-            testImage.cancel(); //cancel background loading of image
-            return true;
+            if(testImage.getProgress() == 1 && !testImage.isError()) {
+                testImage.cancel(); //cancel background loading of image
+                return true;
+            } else
+                return false;
         } catch (IllegalArgumentException exception) {
             return false;
         }
