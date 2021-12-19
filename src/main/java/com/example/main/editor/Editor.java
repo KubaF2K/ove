@@ -627,24 +627,24 @@ public class Editor {
                             strongToBox.getChildren().addAll(strongToLabel, strongToComboBox);
                             HBox buttons = new HBox(10);
                                 Button btnEdit = new Button("Edytuj");
-                                if(checkUrlValidation(spriteText.getText()))
                                     btnEdit.setOnAction(editEvent -> {
-                                        Element element = new Element();
-                                        element.setName(nameText.getText());
-                                        element.setSpriteURL(spriteText.getText());
-                                        element.setWeakToId(weakToComboBox.getValue().getElementId());
-                                        element.setStrongToId(strongToComboBox.getValue().getElementId());
-                                        DBConnection.editElement(cell.getTableRow().getItem().getElementId(), element);
-                                        elements = FXCollections.observableList(DBConnection.getElements());
-                                        elementsTable.setItems(elements);
-                                        root.setRight(null);
-                                    }); else {
-                                        btnEdit.setOnAction(editEvent -> {
+                                        if(checkUrlValidation(spriteText.getText())) {
+                                            System.out.println(spriteText.getText());
+                                            Element element = new Element();
+                                            element.setName(nameText.getText());
+                                            element.setSpriteURL(spriteText.getText());
+                                            element.setWeakToId(weakToComboBox.getValue().getElementId());
+                                            element.setStrongToId(strongToComboBox.getValue().getElementId());
+                                            DBConnection.editElement(cell.getTableRow().getItem().getElementId(), element);
+                                            elements = FXCollections.observableList(DBConnection.getElements());
+                                            elementsTable.setItems(elements);
+                                            root.setRight(null);
+                                        } else {
                                             Alert wrongUrlAlert = new Alert(Alert.AlertType.ERROR);
                                             wrongUrlAlert.setContentText("Podano bledny url");
                                             wrongUrlAlert.show();
-                                        });
-                                }
+                                        }
+                                    });
                                 Button btnCancel = new Button("Anuluj");
                                 btnCancel.setOnAction(c -> root.setRight(null));
                             buttons.getChildren().addAll(btnEdit, btnCancel);
