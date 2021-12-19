@@ -627,17 +627,24 @@ public class Editor {
                             strongToBox.getChildren().addAll(strongToLabel, strongToComboBox);
                             HBox buttons = new HBox(10);
                                 Button btnEdit = new Button("Edytuj");
-                                btnEdit.setOnAction(editEvent -> {
-                                    Element element = new Element();
-                                    element.setName(nameText.getText());
-                                    element.setSpriteURL(spriteText.getText());
-                                    element.setWeakToId(weakToComboBox.getValue().getElementId());
-                                    element.setStrongToId(strongToComboBox.getValue().getElementId());
-                                    DBConnection.editElement(cell.getTableRow().getItem().getElementId(), element);
-                                    elements = FXCollections.observableList(DBConnection.getElements());
-                                    elementsTable.setItems(elements);
-                                    root.setRight(null);
-                                });
+                                if(checkUrlValidation(spriteText.getText()))
+                                    btnEdit.setOnAction(editEvent -> {
+                                        Element element = new Element();
+                                        element.setName(nameText.getText());
+                                        element.setSpriteURL(spriteText.getText());
+                                        element.setWeakToId(weakToComboBox.getValue().getElementId());
+                                        element.setStrongToId(strongToComboBox.getValue().getElementId());
+                                        DBConnection.editElement(cell.getTableRow().getItem().getElementId(), element);
+                                        elements = FXCollections.observableList(DBConnection.getElements());
+                                        elementsTable.setItems(elements);
+                                        root.setRight(null);
+                                    }); else {
+                                        btnEdit.setOnAction(editEvent -> {
+                                            Alert wrongUrlAlert = new Alert(Alert.AlertType.ERROR);
+                                            wrongUrlAlert.setContentText("Podano bledny url");
+                                            wrongUrlAlert.show();
+                                        });
+                                }
                                 Button btnCancel = new Button("Anuluj");
                                 btnCancel.setOnAction(c -> root.setRight(null));
                             buttons.getChildren().addAll(btnEdit, btnCancel);
@@ -670,5 +677,15 @@ public class Editor {
         return scene;
         //TODO
         // zabezpieczenia (parseInt, błędny url)
+    }
+//basic concept of url validation
+    public static boolean checkUrlValidation(String url) {
+        try {
+            Image testImage = new Image(url);
+            testImage.cancel(); //cancel background loading of image
+            return true;
+        } catch (IllegalArgumentException exception) {
+            return false;
+        }
     }
 }
