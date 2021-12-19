@@ -3,7 +3,7 @@
     -fx-background-image: url('file:res/img/background.png');
     -fx-background-repeat: no-repeat;
     -fx-background-size: 351px 452px;
-    -fx-background-position: 103px 48px;
+    -fx-background-position: 103px 90px;
 }
 
 .pause-screen{
@@ -19,4 +19,17 @@
 .log-box .text-area .scroll-bar:horizontal {
     -fx-pref-height: 1;
     -fx-opacity: 0;
+}
+.log-box {
+    -fx-font: 12 Minecraft;
+    -fx-text-fill: #fff;
+}
+.text-area {
+    -fx-focus-color: transparent;
+    -fx-text-box-border: transparent;
+
+}
+.text-area .content {
+    -fx-background-color: #282633;
+    -fx-border-color: #282633;
 }
