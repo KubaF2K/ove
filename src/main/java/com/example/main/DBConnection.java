@@ -91,6 +91,7 @@ public class DBConnection {
         enemy.setDmgMin(newEnemy.getDmgMin());
         enemy.setDmgMax(newEnemy.getDmgMax());
         enemy.setItemModel(newEnemy.getItemModel());
+        enemy.setElement(newEnemy.getElement());
         em.getTransaction().commit();
         em.close();
     }
@@ -103,6 +104,7 @@ public class DBConnection {
         item.setDmgMin(newItem.getDmgMin());
         item.setDmgMax(newItem.getDmgMax());
         item.setType(newItem.getType());
+        item.setElement(newItem.getElement());
         em.getTransaction().commit();
         em.close();
     }

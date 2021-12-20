@@ -18,7 +18,9 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
 import java.util.Objects;
@@ -35,7 +37,7 @@ public class Editor {
         }
         return null;
     }
-    private ItemModel getItemByDBID(int id){
+    private static ItemModel getItemByDBID(int id){
         for(ItemModel i : items){
             if(i.getItemId()==id) return i;
         }
@@ -52,6 +54,9 @@ public class Editor {
         enemies = FXCollections.observableList(DBConnection.getEnemies());
         items = FXCollections.observableList(DBConnection.getItems());
         elements = FXCollections.observableList(DBConnection.getElements());
+        enemies.add(null);
+        items.add(null);
+        elements.add(null);
 
         BorderPane root = new BorderPane();
         TabPane tabPane = new TabPane();
@@ -143,6 +148,7 @@ public class Editor {
                                             EnemyModel enemy = new EnemyModel(nameText.getText(), spriteText.getText(), Integer.parseInt(healthText.getText()), Integer.parseInt(dmgMinText.getText()), Integer.parseInt(dmgMaxText.getText()), itemComboBox.getValue(), elementComboBox.getValue());
                                             DBConnection.addEnemy(enemy);
                                             enemies = FXCollections.observableList(DBConnection.getEnemies());
+                                            enemies.add(null);
                                             enemiesTable.setItems(enemies);
                                             root.setRight(null);
                                         }
@@ -212,6 +218,7 @@ public class Editor {
                                         ItemModel item = new ItemModel(nameText.getText(), spriteText.getText(), Integer.parseInt(dmgMinText.getText()), Integer.parseInt(dmgMaxText.getText()), elementComboBox.getValue());
                                         DBConnection.addItem(item);
                                         items = FXCollections.observableList(DBConnection.getItems());
+                                        items.add(null);
                                         itemsTable.setItems(items);
                                         root.setRight(null);
                                     }
@@ -257,6 +264,7 @@ public class Editor {
                                         ItemModel item = new ItemModel(nameText.getText(), spriteText.getText(), Integer.parseInt(hpText.getText()));
                                         DBConnection.addItem(item);
                                         items = FXCollections.observableList(DBConnection.getItems());
+                                        items.add(null);
                                         itemsTable.setItems(items);
                                         root.setRight(null);
                                     }
@@ -344,6 +352,7 @@ public class Editor {
                                         else element.setStrongToId(strongToComboBox.getValue().getElementId());
                                         DBConnection.addElement(element);
                                         elements = FXCollections.observableList(DBConnection.getElements());
+                                        elements.add(null);
                                         elementsTable.setItems(elements);
                                         root.setRight(null);
                                     }
@@ -378,8 +387,11 @@ public class Editor {
             TableColumn<EnemyModel, Rectangle> enemySpriteCol = new TableColumn<>("Sprite");
                 enemySpriteCol.setCellValueFactory(i -> {
                     Rectangle spriteRect = new Rectangle(32,32);
-                    Image sprite = new Image(i.getValue().getSpriteURL());
-                    spriteRect.setFill(new ImagePattern(sprite));
+                    if(i.getValue() != null) {
+                        Image sprite = new Image(i.getValue().getSpriteURL());
+                        spriteRect.setFill(new ImagePattern(sprite));
+                    }
+                    else spriteRect.setFill(Color.rgb(0,0,0,0));
                     return Bindings.createObjectBinding(() -> spriteRect);
                 });
                 enemySpriteCol.setMinWidth(100);
@@ -389,19 +401,25 @@ public class Editor {
                 enemyHPCol.setMinWidth(100);
             TableColumn<EnemyModel, String> enemyDmgCol = new TableColumn<>("Obrażenia");
                 enemyDmgCol.setCellValueFactory(i -> {
-                    String dmg = i.getValue().getDmgMin()+"-"+i.getValue().getDmgMax();
+                    String dmg;
+                    if(i.getValue()!=null)
+                        dmg = i.getValue().getDmgMin()+"-"+i.getValue().getDmgMax();
+                    else dmg = "";
                     return Bindings.createObjectBinding(() -> dmg);
                 });
                 enemyDmgCol.setMinWidth(100);
             TableColumn<EnemyModel, Node> enemyItemCol = new TableColumn<>("Przedmiot");
                 enemyItemCol.setCellValueFactory(i -> {
                     Node val = new Label("Brak");
-                    if(i.getValue().getItemModel()!=null){
-                        Image sprite = new Image(i.getValue().getItemModel().getSpriteURL());
-                        Rectangle spriteRect = new Rectangle(32,32);
-                        spriteRect.setFill(new ImagePattern(sprite));
-                        val = spriteRect;
+                    if(i.getValue()!=null) {
+                        if (i.getValue().getItemModel() != null) {
+                            Image sprite = new Image(i.getValue().getItemModel().getSpriteURL());
+                            Rectangle spriteRect = new Rectangle(32, 32);
+                            spriteRect.setFill(new ImagePattern(sprite));
+                            val = spriteRect;
+                        }
                     }
+                    else val = new Label("");
                     Node finalVal = val;
                     return Bindings.createObjectBinding(() -> finalVal);
                 });
@@ -409,12 +427,15 @@ public class Editor {
             TableColumn<EnemyModel, Node> enemyElementCol = new TableColumn<>("Element");
                 enemyElementCol.setCellValueFactory(i -> {
                     Node val = new Label("Normalny");
-                    if(i.getValue().getElement()!=null){
-                        Image sprite = new Image(i.getValue().getElement().getSpriteURL());
-                        Rectangle spriteRect = new Rectangle(32, 32);
-                        spriteRect.setFill(new ImagePattern(sprite));
-                        val = spriteRect;
+                    if(i.getValue()!=null) {
+                        if (i.getValue().getElement() != null) {
+                            Image sprite = new Image(i.getValue().getElement().getSpriteURL());
+                            Rectangle spriteRect = new Rectangle(32, 32);
+                            spriteRect.setFill(new ImagePattern(sprite));
+                            val = spriteRect;
+                        }
                     }
+                    else val = new Label("");
                     Node finalVal = val;
                     return Bindings.createObjectBinding(() -> finalVal);
                 });
@@ -425,7 +446,7 @@ public class Editor {
                         @Override
                         protected void updateItem(HBox node, boolean b) {
                             super.updateItem(node, b);
-                            if(b) setGraphic(null);
+                            if(b || getTableRow().getItem() == null) setGraphic(null);
                             else setGraphic(editBtns);
                         }
                     };
@@ -471,7 +492,7 @@ public class Editor {
                                 else setText("Brak");
                             }
                         });
-                        itemComboBox.getSelectionModel().select(editCell.getTableRow().getItem().getItemModel());
+                        itemComboBox.getSelectionModel().select(getItemByDBID(editCell.getTableRow().getItem().getItemModel().getItemId()));
                         itemBox.getChildren().addAll(itemLabel, itemComboBox);
                         HBox elementBox = new HBox(10);
                             Label elementLabel = new Label("Element:");
@@ -494,6 +515,7 @@ public class Editor {
                                     else setText("Brak");
                                 }
                             });
+                            elementComboBox.getSelectionModel().select(getElementByDBID(editCell.getTableRow().getItem().getElement().getElementId()));
                         elementBox.getChildren().addAll(elementLabel, elementComboBox);
                         HBox buttons = new HBox(10);
                         Button btnAdd = new Button("Edytuj");
@@ -503,6 +525,7 @@ public class Editor {
                                     EnemyModel enemy = new EnemyModel(nameText.getText(), spriteText.getText(), Integer.parseInt(healthText.getText()), Integer.parseInt(dmgMinText.getText()), Integer.parseInt(dmgMaxText.getText()), itemComboBox.getValue(), elementComboBox.getValue());
                                     DBConnection.editEnemy(editCell.getTableRow().getItem().getEnemyId(), enemy);
                                     enemies = FXCollections.observableList(DBConnection.getEnemies());
+                                    enemies.add(null);
                                     enemiesTable.setItems(enemies);
                                     root.setRight(null);
                                 }
@@ -528,6 +551,7 @@ public class Editor {
                     delBtn.setOnAction(a -> {
                         DBConnection.deleteEnemy(editCell.getTableRow().getItem().getEnemyId());
                         enemies = FXCollections.observableList(DBConnection.getEnemies());
+                        enemies.add(null);
                         enemiesTable.setItems(enemies);
                     });
                     editBtns.getChildren().addAll(editBtn, delBtn);
@@ -550,26 +574,32 @@ public class Editor {
                 itemNameCol.setMinWidth(100);
             TableColumn<ItemModel, Rectangle> itemSpriteCol = new TableColumn<>("Sprite");
                 itemSpriteCol.setCellValueFactory(e -> {
-                    Image sprite = new Image(e.getValue().getSpriteURL());
                     Rectangle rect = new Rectangle(32,32);
-                    rect.setFill(new ImagePattern(sprite));
+                    if(e.getValue()!=null) {
+                        Image sprite = new Image(e.getValue().getSpriteURL());
+                        rect.setFill(new ImagePattern(sprite));
+                    }
+                    else rect.setFill(Color.rgb(0,0,0,0));
                     return Bindings.createObjectBinding(() -> rect);
                 });
                 itemSpriteCol.setMinWidth(100);
-            //TODO ElementCol
             TableColumn<ItemModel, String> itemDmgCol = new TableColumn<>("HP/Obrażenia");
                 itemDmgCol.setCellValueFactory(e -> {
-                    String text = e.getValue().getType() == Item.Type.Heal ? String.valueOf(e.getValue().getDmgMax()) : e.getValue().getDmgMin()+"-"+e.getValue().getDmgMax();
+                    String text;
+                    if(e.getValue()!=null)
+                        text = e.getValue().getType() == Item.Type.Heal ? String.valueOf(e.getValue().getDmgMax()) : e.getValue().getDmgMin()+"-"+e.getValue().getDmgMax();
+                    else text = "";
                     return Bindings.createObjectBinding(() -> text);
                 });
                 itemDmgCol.setMinWidth(100);
             TableColumn<ItemModel, String> itemTypeCol = new TableColumn<>("Typ");
                 itemTypeCol.setCellValueFactory(e -> {
                     String text = "";
-                    switch (e.getValue().getType()){
-                        case Heal -> text = "Leczenie";
-                        case Weapon -> text = "Broń";
-                    }
+                    if(e.getValue()!=null)
+                        switch (e.getValue().getType()){
+                            case Heal -> text = "Leczenie";
+                            case Weapon -> text = "Broń";
+                        }
                     String finalText = text;
                     return Bindings.createObjectBinding(() -> finalText);
                 });
@@ -577,13 +607,16 @@ public class Editor {
             TableColumn<ItemModel, Node> itemElementCol = new TableColumn<>("Element");
                 itemElementCol.setCellValueFactory(e -> {
                     Node val = new Label("Normalny");
-                    if(e.getValue().getType() != Item.Type.Weapon) val = new Label("Nie dotyczy");
-                    else if(e.getValue().getElement()!= null){
-                        Image sprite = new Image(e.getValue().getElement().getSpriteURL());
-                        Rectangle spriteRect = new Rectangle(32, 32);
-                        spriteRect.setFill(new ImagePattern(sprite));
-                        val = spriteRect;
+                    if(e.getValue()!=null) {
+                        if (e.getValue().getType() != Item.Type.Weapon) val = new Label("Nie dotyczy");
+                        else if (e.getValue().getElement() != null) {
+                            Image sprite = new Image(e.getValue().getElement().getSpriteURL());
+                            Rectangle spriteRect = new Rectangle(32, 32);
+                            spriteRect.setFill(new ImagePattern(sprite));
+                            val = spriteRect;
+                        }
                     }
+                    else val = new Label("");
                     Node finalVal = val;
                     return Bindings.createObjectBinding(() -> finalVal);
                 });
@@ -594,8 +627,11 @@ public class Editor {
                         @Override
                         protected void updateItem(HBox hBox, boolean b) {
                             super.updateItem(hBox, b);
-                            if(b) setGraphic(null);
-                            else setGraphic(editBtns);
+                            if(getTableRow() != null) {
+                                if (b || getTableRow().getItem() == null) setGraphic(null);
+                                else setGraphic(editBtns);
+                            }
+                            else setGraphic(null);
                         }
                     };
                     Button editBtn = new Button("Edytuj");
@@ -638,6 +674,7 @@ public class Editor {
                                         else setText("Brak");
                                     }
                                 });
+                                elementComboBox.getSelectionModel().select(getElementByDBID(editCell.getTableRow().getItem().getElement().getElementId()));
                                 elementBox.getChildren().addAll(elementLabel, elementComboBox);
                                 HBox buttons = new HBox(10);
                                     Button btnAdd = new Button("Edytuj");
@@ -647,6 +684,7 @@ public class Editor {
                                                 ItemModel item = new ItemModel(nameText.getText(), spriteText.getText(), Integer.parseInt(dmgMinText.getText()), Integer.parseInt(dmgMaxText.getText()), elementComboBox.getValue());
                                                 DBConnection.editItem(editCell.getTableRow().getItem().getItemId(), item);
                                                 items = FXCollections.observableList(DBConnection.getItems());
+                                                items.add(null);
                                                 itemsTable.setItems(items);
                                                 root.setRight(null);
                                             }
@@ -665,7 +703,7 @@ public class Editor {
                                     Button btnCancel = new Button("Anuluj");
                                     btnCancel.setOnAction(b -> root.setRight(null));
                                 buttons.getChildren().addAll(btnAdd, btnCancel);
-                                sidebar.getChildren().addAll(nameBox, spriteBox, dmgBox, elementComboBox, buttons);
+                                sidebar.getChildren().addAll(nameBox, spriteBox, dmgBox, elementBox, buttons);
                             }
                             case Heal -> {
                                 HBox nameBox = new HBox(10);
@@ -688,6 +726,7 @@ public class Editor {
                                             ItemModel item = new ItemModel(nameText.getText(), spriteText.getText(), Integer.parseInt(hpText.getText()));
                                             DBConnection.editItem(editCell.getTableRow().getItem().getItemId(), item);
                                             items = FXCollections.observableList(DBConnection.getItems());
+                                            items.add(null);
                                             itemsTable.setItems(items);
                                             root.setRight(null);
                                         }
@@ -715,12 +754,14 @@ public class Editor {
                     deleteBtn.setOnAction(a -> {
                         DBConnection.deleteItem(editCell.getTableRow().getItem().getItemId());
                         items = FXCollections.observableList(DBConnection.getItems());
+                        items.add(null);
                         itemsTable.setItems(items);
                         root.setRight(null);
                     });
                     editBtns.getChildren().addAll(editBtn, deleteBtn);
                     return editCell;
                 });
+                itemEditCol.setMinWidth(150);
             itemsTable.getColumns().add(itemIdCol);
             itemsTable.getColumns().add(itemNameCol);
             itemsTable.getColumns().add(itemSpriteCol);
@@ -736,35 +777,44 @@ public class Editor {
                 elementNameCol.setMinWidth(100);
             TableColumn<Element, Rectangle> elementSpriteCol = new TableColumn<>("Sprite");
                 elementSpriteCol.setCellValueFactory(e -> {
-                    Image sprite = new Image(e.getValue().getSpriteURL());
                     Rectangle rect = new Rectangle(32, 32);
-                    rect.setFill(new ImagePattern(sprite));
+                    if(e.getValue()!=null) {
+                        Image sprite = new Image(e.getValue().getSpriteURL());
+                        rect.setFill(new ImagePattern(sprite));
+                    }
+                    else rect.setFill(Color.rgb(0,0,0,0));
                     return Bindings.createObjectBinding(() -> rect);
                 });
                 elementSpriteCol.setMinWidth(100);
             TableColumn<Element, Node> elementWeakToCol = new TableColumn<>("Słabe przeciw");
                 elementWeakToCol.setCellValueFactory(e -> {
                     Node val;
-                    if(e.getValue().getWeakToId() == -1) val = new Label("Nie ustawiono");
-                    else{
-                        Rectangle rect = new Rectangle(32, 32);
-                        Image sprite = new Image(Objects.requireNonNull(getElementByDBID(e.getValue().getWeakToId())).getSpriteURL());
-                        rect.setFill(new ImagePattern(sprite));
-                        val = rect;
+                    if(e.getValue()!=null) {
+                        if (e.getValue().getWeakToId() == -1) val = new Label("Nie ustawiono");
+                        else {
+                            Rectangle rect = new Rectangle(32, 32);
+                            Image sprite = new Image(Objects.requireNonNull(getElementByDBID(e.getValue().getWeakToId())).getSpriteURL());
+                            rect.setFill(new ImagePattern(sprite));
+                            val = rect;
+                        }
                     }
+                    else val = new Label("");
                     return Bindings.createObjectBinding(() -> val);
                 });
                 elementWeakToCol.setMinWidth(100);
             TableColumn<Element, Node> elementStrongToCol = new TableColumn<>("Mocne przeciw");
                 elementStrongToCol.setCellValueFactory(e -> {
                     Node val;
-                    if(e.getValue().getStrongToId() == -1) val = new Label("Nie ustawiono");
-                    else{
-                        Rectangle rect = new Rectangle(32, 32);
-                        Image sprite = new Image(Objects.requireNonNull(getElementByDBID(e.getValue().getStrongToId())).getSpriteURL());
-                        rect.setFill(new ImagePattern(sprite));
-                        val = rect;
+                    if(e.getValue()!=null) {
+                        if (e.getValue().getStrongToId() == -1) val = new Label("Nie ustawiono");
+                        else {
+                            Rectangle rect = new Rectangle(32, 32);
+                            Image sprite = new Image(Objects.requireNonNull(getElementByDBID(e.getValue().getStrongToId())).getSpriteURL());
+                            rect.setFill(new ImagePattern(sprite));
+                            val = rect;
+                        }
                     }
+                    else val = new Label("");
                     return Bindings.createObjectBinding(() -> val);
                 });
                 elementStrongToCol.setMinWidth(100);
@@ -775,8 +825,11 @@ public class Editor {
                         @Override
                         protected void updateItem(HBox hBox, boolean b) {
                             super.updateItem(hBox, b);
-                            if(b) setGraphic(null);
-                            else setGraphic(editBox);
+                            if(getTableRow()!=null) {
+                                if (b || getTableRow().getItem() == null) setGraphic(null);
+                                else setGraphic(editBox);
+                            }
+                            else setGraphic(null);
                         }
                     };
                     Button editBtn = new Button("Edytuj");
@@ -851,6 +904,7 @@ public class Editor {
                                                 element.setStrongToId(strongToComboBox.getValue().getElementId());
                                                 DBConnection.editElement(cell.getTableRow().getItem().getElementId(), element);
                                                 elements = FXCollections.observableList(DBConnection.getElements());
+                                                elements.add(null);
                                                 elementsTable.setItems(elements);
                                                 root.setRight(null);
                                             }
@@ -875,11 +929,13 @@ public class Editor {
                     delBtn.setOnAction(a -> {
                         DBConnection.deleteElement(cell.getTableRow().getItem().getElementId());
                         elements = FXCollections.observableList(DBConnection.getElements());
+                        elements.add(null);
                         elementsTable.setItems(elements);
                     });
                     editBox.getChildren().addAll(editBtn, delBtn);
                     return cell;
                 });
+                elementEditCol.setMinWidth(150);
             elementsTable.getColumns().add(elementIdCol);
             elementsTable.getColumns().add(elementNameCol);
             elementsTable.getColumns().add(elementSpriteCol);
