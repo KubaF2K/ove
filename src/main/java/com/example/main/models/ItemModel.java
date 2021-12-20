@@ -24,10 +24,10 @@ public class ItemModel implements Serializable {
     private Element element;
 
     @Column(name = "dmg_min")
-    private int dmg_min;
+    private int dmgMin;
 
     @Column(name = "dmg_max")
-    private int dmg_max;
+    private int dmgMax;
 
     @Column(name = "type")
     private Item.Type type;
@@ -64,20 +64,20 @@ public class ItemModel implements Serializable {
         this.element = element;
     }
 
-    public int getDmg_min() {
-        return dmg_min;
+    public int getDmgMin() {
+        return dmgMin;
     }
 
-    public void setDmg_min(int dmg_min) {
-        this.dmg_min = dmg_min;
+    public void setDmgMin(int dmg_min) {
+        this.dmgMin = dmg_min;
     }
 
-    public int getDmg_max() {
-        return dmg_max;
+    public int getDmgMax() {
+        return dmgMax;
     }
 
-    public void setDmg_max(int dmg_max) {
-        this.dmg_max = dmg_max;
+    public void setDmgMax(int dmg_max) {
+        this.dmgMax = dmg_max;
     }
 
     public Item.Type getType() {
@@ -88,18 +88,18 @@ public class ItemModel implements Serializable {
         this.type = type;
     }
 
-    public ItemModel(String name, String spriteURL, int dmg_min, int dmg_max, Element element) {
+    public ItemModel(String name, String spriteURL, int dmgMin, int dmgMax, Element element) {
         this.name = name;
         this.spriteURL = spriteURL;
-        this.dmg_min = dmg_min;
-        this.dmg_max = dmg_max;
+        this.dmgMin = dmgMin;
+        this.dmgMax = dmgMax;
         this.element = element;
         type = Item.Type.Weapon;
     }
     public ItemModel(String name, String spriteURL, int healAmount){
         this.name = name;
         this.spriteURL = spriteURL;
-        dmg_min = dmg_max = healAmount;
+        dmgMin = dmgMax = healAmount;
         type = Item.Type.Heal;
     }
 

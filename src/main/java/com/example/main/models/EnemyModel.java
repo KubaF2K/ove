@@ -10,7 +10,7 @@ public class EnemyModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_enemy")
-    private int id_enemy;
+    private int enemyId;
 
     @Column(name = "name")
     private String name;
@@ -47,12 +47,12 @@ public class EnemyModel implements Serializable {
         this.element = element;
     }
 
-    public int getId_enemy() {
-        return id_enemy;
+    public int getEnemyId() {
+        return enemyId;
     }
 
-    public void setId_enemy(int id_enemy) {
-        this.id_enemy = id_enemy;
+    public void setEnemyId(int enemyId) {
+        this.enemyId = enemyId;
     }
 
     public String getName() {

@@ -1,6 +1,9 @@
 package com.example.main.game;
 
+import com.example.main.models.ItemModel;
 import javafx.scene.image.Image;
+
+import java.util.Objects;
 
 public class Player extends Mob{
     private final Item[] inventory = new Item[10];
@@ -20,6 +23,17 @@ public class Player extends Mob{
 
     public Player(Image sprite, int startHp){
         super(sprite, startHp, 4, 4);//Startowa pozycja (4,4) czyli środek siatki
+    }
+
+    public boolean checkForWeapon(ItemModel weapon){
+        if(weapon.getType() == Item.Type.Heal) return false;
+        for (Item item :
+                inventory) {
+            if(item!=null)
+                if (Objects.equals(item.getName(), weapon.getName()) && item.getElement() == weapon.getElement() && item.getDmgMin() == weapon.getDmgMin() && item.getDmgMax() == weapon.getDmgMax())
+                    return true;
+        }
+        return false;
     }
 
     public void useItem(){

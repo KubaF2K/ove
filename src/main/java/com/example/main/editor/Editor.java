@@ -21,6 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
+@SuppressWarnings("Duplicates")
 public class Editor {
     private static ObservableList<EnemyModel> enemies;
     private static ObservableList<ItemModel> items;
@@ -97,11 +98,25 @@ public class Editor {
                         HBox buttons = new HBox(10);
                             Button btnAdd = new Button("Dodaj");
                                 btnAdd.setOnAction(b -> {
-                                    EnemyModel enemy = new EnemyModel(nameText.getText(), spriteText.getText(), Integer.parseInt(healthText.getText()), Integer.parseInt(dmgMinText.getText()), Integer.parseInt(dmgMaxText.getText()), itemComboBox.getValue(), elementComboBox.getValue());
-                                    DBConnection.addEnemy(enemy);
-                                    enemies = FXCollections.observableList(DBConnection.getEnemies());
-                                    enemiesTable.setItems(enemies);
-                                    root.setRight(null);
+                                    if(checkUrlValidation(spriteText.getText())) {
+                                        try {
+                                            EnemyModel enemy = new EnemyModel(nameText.getText(), spriteText.getText(), Integer.parseInt(healthText.getText()), Integer.parseInt(dmgMinText.getText()), Integer.parseInt(dmgMaxText.getText()), itemComboBox.getValue(), elementComboBox.getValue());
+                                            DBConnection.addEnemy(enemy);
+                                            enemies = FXCollections.observableList(DBConnection.getEnemies());
+                                            enemiesTable.setItems(enemies);
+                                            root.setRight(null);
+                                        }
+                                        catch(NumberFormatException ex){
+                                            Alert wrongNumberAlert = new Alert(Alert.AlertType.ERROR);
+                                            wrongNumberAlert.setContentText("Nie podano liczby");
+                                            wrongNumberAlert.show();
+                                        }
+                                    }
+                                    else {
+                                        Alert wrongUrlAlert = new Alert(Alert.AlertType.ERROR);
+                                        wrongUrlAlert.setContentText("Podano błędny url");
+                                        wrongUrlAlert.show();
+                                    }
                                 });
                             Button btnCancel = new Button("Anuluj");
                                 btnCancel.setOnAction(b -> root.setRight(null));
@@ -143,11 +158,25 @@ public class Editor {
                         HBox buttons = new HBox(10);
                             Button btnAdd = new Button("Dodaj");
                             btnAdd.setOnAction(b -> {
-                                ItemModel item = new ItemModel(nameText.getText(), spriteText.getText(), Integer.parseInt(dmgMinText.getText()), Integer.parseInt(dmgMaxText.getText()), elementComboBox.getValue());
-                                DBConnection.addItem(item);
-                                items = FXCollections.observableList(DBConnection.getItems());
-                                itemsTable.setItems(items);
-                                root.setRight(null);
+                                if(checkUrlValidation(spriteText.getText())) {
+                                    try {
+                                        ItemModel item = new ItemModel(nameText.getText(), spriteText.getText(), Integer.parseInt(dmgMinText.getText()), Integer.parseInt(dmgMaxText.getText()), elementComboBox.getValue());
+                                        DBConnection.addItem(item);
+                                        items = FXCollections.observableList(DBConnection.getItems());
+                                        itemsTable.setItems(items);
+                                        root.setRight(null);
+                                    }
+                                    catch(NumberFormatException ex){
+                                        Alert wrongNumberAlert = new Alert(Alert.AlertType.ERROR);
+                                        wrongNumberAlert.setContentText("Nie podano liczby");
+                                        wrongNumberAlert.show();
+                                    }
+                                }
+                                else {
+                                    Alert wrongUrlAlert = new Alert(Alert.AlertType.ERROR);
+                                    wrongUrlAlert.setContentText("Podano błędny url");
+                                    wrongUrlAlert.show();
+                                }
                             });
                             Button btnCancel = new Button("Anuluj");
                             btnCancel.setOnAction(b -> root.setRight(null));
@@ -174,11 +203,25 @@ public class Editor {
                         HBox buttons = new HBox(10);
                             Button btnAdd = new Button("Dodaj");
                             btnAdd.setOnAction(b -> {
-                                ItemModel item = new ItemModel(nameText.getText(), spriteText.getText(), Integer.parseInt(hpText.getText()));
-                                DBConnection.addItem(item);
-                                items = FXCollections.observableList(DBConnection.getItems());
-                                itemsTable.setItems(items);
-                                root.setRight(null);
+                                if(checkUrlValidation(spriteText.getText())) {
+                                    try {
+                                        ItemModel item = new ItemModel(nameText.getText(), spriteText.getText(), Integer.parseInt(hpText.getText()));
+                                        DBConnection.addItem(item);
+                                        items = FXCollections.observableList(DBConnection.getItems());
+                                        itemsTable.setItems(items);
+                                        root.setRight(null);
+                                    }
+                                    catch(NumberFormatException ex){
+                                        Alert wrongNumberAlert = new Alert(Alert.AlertType.ERROR);
+                                        wrongNumberAlert.setContentText("Nie podano liczby");
+                                        wrongNumberAlert.show();
+                                    }
+                                }
+                                else {
+                                    Alert wrongUrlAlert = new Alert(Alert.AlertType.ERROR);
+                                    wrongUrlAlert.setContentText("Podano błędny url");
+                                    wrongUrlAlert.show();
+                                }
                             });
                             Button btnCancel = new Button("Anuluj");
                             btnCancel.setOnAction(b -> root.setRight(null));
@@ -225,15 +268,31 @@ public class Editor {
                         HBox buttons = new HBox(10);
                             Button addBtn = new Button("Dodaj");
                             addBtn.setOnAction(a -> {
-                                Element element = new Element();
-                                element.setName(nameText.getText());
-                                element.setSpriteURL(spriteText.getText());
-                                element.setWeakToId(weakToComboBox.getValue().getElementId());
-                                element.setStrongToId(strongToComboBox.getValue().getElementId());
-                                DBConnection.addElement(element);
-                                elements = FXCollections.observableList(DBConnection.getElements());
-                                elementsTable.setItems(elements);
-                                root.setRight(null);
+                                if(checkUrlValidation(spriteText.getText())) {
+                                    try {
+                                        Element element = new Element();
+                                        element.setName(nameText.getText());
+                                        element.setSpriteURL(spriteText.getText());
+                                        if (weakToComboBox.getValue() == null) element.setWeakToId(-1);
+                                        else element.setWeakToId(weakToComboBox.getValue().getElementId());
+                                        if (strongToComboBox.getValue() == null) element.setStrongToId(-1);
+                                        else element.setStrongToId(strongToComboBox.getValue().getElementId());
+                                        DBConnection.addElement(element);
+                                        elements = FXCollections.observableList(DBConnection.getElements());
+                                        elementsTable.setItems(elements);
+                                        root.setRight(null);
+                                    }
+                                    catch(NumberFormatException ex){
+                                        Alert wrongNumberAlert = new Alert(Alert.AlertType.ERROR);
+                                        wrongNumberAlert.setContentText("Nie podano liczby");
+                                        wrongNumberAlert.show();
+                                    }
+                                }
+                                else {
+                                    Alert wrongUrlAlert = new Alert(Alert.AlertType.ERROR);
+                                    wrongUrlAlert.setContentText("Podano błędny url");
+                                    wrongUrlAlert.show();
+                                }
                             });
                             Button cancelBtn = new Button("Anuluj");
                             cancelBtn.setOnAction(a -> root.setRight(null));
@@ -356,11 +415,25 @@ public class Editor {
                         HBox buttons = new HBox(10);
                         Button btnAdd = new Button("Edytuj");
                         btnAdd.setOnAction(b -> {
-                            EnemyModel enemy = new EnemyModel(nameText.getText(), spriteText.getText(), Integer.parseInt(healthText.getText()), Integer.parseInt(dmgMinText.getText()), Integer.parseInt(dmgMaxText.getText()), itemComboBox.getValue(), elementComboBox.getValue());
-                            DBConnection.editEnemy(editCell.getTableRow().getItem().getId_enemy(), enemy);
-                            enemies = FXCollections.observableList(DBConnection.getEnemies());
-                            enemiesTable.setItems(enemies);
-                            root.setRight(null);
+                            if(checkUrlValidation(spriteText.getText())) {
+                                try {
+                                    EnemyModel enemy = new EnemyModel(nameText.getText(), spriteText.getText(), Integer.parseInt(healthText.getText()), Integer.parseInt(dmgMinText.getText()), Integer.parseInt(dmgMaxText.getText()), itemComboBox.getValue(), elementComboBox.getValue());
+                                    DBConnection.editEnemy(editCell.getTableRow().getItem().getEnemyId(), enemy);
+                                    enemies = FXCollections.observableList(DBConnection.getEnemies());
+                                    enemiesTable.setItems(enemies);
+                                    root.setRight(null);
+                                }
+                                catch(NumberFormatException ex){
+                                    Alert wrongNumberAlert = new Alert(Alert.AlertType.ERROR);
+                                    wrongNumberAlert.setContentText("Nie podano liczby");
+                                    wrongNumberAlert.show();
+                                }
+                            }
+                            else {
+                                Alert wrongUrlAlert = new Alert(Alert.AlertType.ERROR);
+                                wrongUrlAlert.setContentText("Podano błędny url");
+                                wrongUrlAlert.show();
+                            }
                         });
                         Button btnCancel = new Button("Anuluj");
                         btnCancel.setOnAction(b -> root.setRight(null));
@@ -370,7 +443,7 @@ public class Editor {
                     });
                     Button delBtn = new Button("Usuń");
                     delBtn.setOnAction(a -> {
-                        DBConnection.deleteEnemy(editCell.getTableRow().getItem().getId_enemy());
+                        DBConnection.deleteEnemy(editCell.getTableRow().getItem().getEnemyId());
                         enemies = FXCollections.observableList(DBConnection.getEnemies());
                         enemiesTable.setItems(enemies);
                     });
@@ -403,7 +476,7 @@ public class Editor {
             //TODO ElementCol
             TableColumn<ItemModel, String> itemDmgCol = new TableColumn<>("HP/Obrażenia");
                 itemDmgCol.setCellValueFactory(e -> {
-                    String text = e.getValue().getType() == Item.Type.Heal ? String.valueOf(e.getValue().getDmg_max()) : e.getValue().getDmg_min()+"-"+e.getValue().getDmg_max();
+                    String text = e.getValue().getType() == Item.Type.Heal ? String.valueOf(e.getValue().getDmgMax()) : e.getValue().getDmgMin()+"-"+e.getValue().getDmgMax();
                     return Bindings.createObjectBinding(() -> text);
                 });
                 itemDmgCol.setMinWidth(100);
@@ -457,9 +530,9 @@ public class Editor {
                                 spriteBox.getChildren().addAll(spriteLabel, spriteText);
                                 HBox dmgBox = new HBox(10);
                                     Label dmgLabel = new Label("Obrażenia:");
-                                    TextField dmgMinText = new TextField(String.valueOf(editCell.getTableRow().getItem().getDmg_min()));
+                                    TextField dmgMinText = new TextField(String.valueOf(editCell.getTableRow().getItem().getDmgMin()));
                                     Label dmgLine = new Label("-");
-                                    TextField dmgMaxText = new TextField(String.valueOf(editCell.getTableRow().getItem().getDmg_max()));
+                                    TextField dmgMaxText = new TextField(String.valueOf(editCell.getTableRow().getItem().getDmgMax()));
                                 dmgBox.getChildren().addAll(dmgLabel, dmgMinText, dmgLine, dmgMaxText);
                                 HBox elementBox = new HBox(10);
                                 Label elementLabel = new Label("Element:");
@@ -477,11 +550,25 @@ public class Editor {
                                 HBox buttons = new HBox(10);
                                     Button btnAdd = new Button("Edytuj");
                                     btnAdd.setOnAction(b -> {
-                                        ItemModel item = new ItemModel(nameText.getText(), spriteText.getText(), Integer.parseInt(dmgMinText.getText()), Integer.parseInt(dmgMaxText.getText()), elementComboBox.getValue());
-                                        DBConnection.editItem(editCell.getTableRow().getItem().getItemId(), item);
-                                        items = FXCollections.observableList(DBConnection.getItems());
-                                        itemsTable.setItems(items);
-                                        root.setRight(null);
+                                        if(checkUrlValidation(spriteText.getText())) {
+                                            try {
+                                                ItemModel item = new ItemModel(nameText.getText(), spriteText.getText(), Integer.parseInt(dmgMinText.getText()), Integer.parseInt(dmgMaxText.getText()), elementComboBox.getValue());
+                                                DBConnection.editItem(editCell.getTableRow().getItem().getItemId(), item);
+                                                items = FXCollections.observableList(DBConnection.getItems());
+                                                itemsTable.setItems(items);
+                                                root.setRight(null);
+                                            }
+                                            catch(NumberFormatException ex){
+                                                Alert wrongNumberAlert = new Alert(Alert.AlertType.ERROR);
+                                                wrongNumberAlert.setContentText("Nie podano liczby");
+                                                wrongNumberAlert.show();
+                                            }
+                                        }
+                                        else {
+                                            Alert wrongUrlAlert = new Alert(Alert.AlertType.ERROR);
+                                            wrongUrlAlert.setContentText("Podano błędny url");
+                                            wrongUrlAlert.show();
+                                        }
                                     });
                                     Button btnCancel = new Button("Anuluj");
                                     btnCancel.setOnAction(b -> root.setRight(null));
@@ -499,16 +586,30 @@ public class Editor {
                                 spriteBox.getChildren().addAll(spriteLabel, spriteText);
                                 HBox hpBox = new HBox(10);
                                 Label hpLabel = new Label("Leczenie:");
-                                TextField hpText = new TextField(String.valueOf(editCell.getTableRow().getItem().getDmg_max()));
+                                TextField hpText = new TextField(String.valueOf(editCell.getTableRow().getItem().getDmgMax()));
                                 hpBox.getChildren().addAll(hpLabel, hpText);
                                 HBox buttons = new HBox(10);
                                 Button btnAdd = new Button("Dodaj");
                                 btnAdd.setOnAction(b -> {
-                                    ItemModel item = new ItemModel(nameText.getText(), spriteText.getText(), Integer.parseInt(hpText.getText()));
-                                    DBConnection.editItem(editCell.getTableRow().getItem().getItemId(), item);
-                                    items = FXCollections.observableList(DBConnection.getItems());
-                                    itemsTable.setItems(items);
-                                    root.setRight(null);
+                                    if(checkUrlValidation(spriteText.getText())) {
+                                        try {
+                                            ItemModel item = new ItemModel(nameText.getText(), spriteText.getText(), Integer.parseInt(hpText.getText()));
+                                            DBConnection.editItem(editCell.getTableRow().getItem().getItemId(), item);
+                                            items = FXCollections.observableList(DBConnection.getItems());
+                                            itemsTable.setItems(items);
+                                            root.setRight(null);
+                                        }
+                                        catch(NumberFormatException ex){
+                                            Alert wrongNumberAlert = new Alert(Alert.AlertType.ERROR);
+                                            wrongNumberAlert.setContentText("Nie podano liczby");
+                                            wrongNumberAlert.show();
+                                        }
+                                    }
+                                    else {
+                                        Alert wrongUrlAlert = new Alert(Alert.AlertType.ERROR);
+                                        wrongUrlAlert.setContentText("Podano błędny url");
+                                        wrongUrlAlert.show();
+                                    }
                                 });
                                 Button btnCancel = new Button("Anuluj");
                                 btnCancel.setOnAction(b -> root.setRight(null));
@@ -609,7 +710,8 @@ public class Editor {
                                         else setText("Brak");
                                     }
                                 });
-                                weakToComboBox.getSelectionModel().select(DBConnection.getElement(cell.getTableRow().getItem().getWeakToId()));
+                                if(cell.getTableRow().getItem().getWeakToId() != -1)
+                                    weakToComboBox.getSelectionModel().select(DBConnection.getElement(cell.getTableRow().getItem().getWeakToId()));
                             weakToBox.getChildren().addAll(weakToLabel, weakToComboBox);
                             HBox strongToBox = new HBox(10);
                                 Label strongToLabel = new Label("Mocne przeciw:");
@@ -623,25 +725,33 @@ public class Editor {
                                         else setText("Brak");
                                     }
                                 });
-                                strongToComboBox.getSelectionModel().select(DBConnection.getElement(cell.getTableRow().getItem().getStrongToId()));
+                                if(cell.getTableRow().getItem().getStrongToId()!= -1)
+                                    strongToComboBox.getSelectionModel().select(DBConnection.getElement(cell.getTableRow().getItem().getStrongToId()));
                             strongToBox.getChildren().addAll(strongToLabel, strongToComboBox);
                             HBox buttons = new HBox(10);
                                 Button btnEdit = new Button("Edytuj");
                                     btnEdit.setOnAction(editEvent -> {
                                         if(checkUrlValidation(spriteText.getText())) {
-                                            System.out.println(spriteText.getText());
-                                            Element element = new Element();
-                                            element.setName(nameText.getText());
-                                            element.setSpriteURL(spriteText.getText());
-                                            element.setWeakToId(weakToComboBox.getValue().getElementId());
-                                            element.setStrongToId(strongToComboBox.getValue().getElementId());
-                                            DBConnection.editElement(cell.getTableRow().getItem().getElementId(), element);
-                                            elements = FXCollections.observableList(DBConnection.getElements());
-                                            elementsTable.setItems(elements);
-                                            root.setRight(null);
+                                            try {
+                                                System.out.println(spriteText.getText());
+                                                Element element = new Element();
+                                                element.setName(nameText.getText());
+                                                element.setSpriteURL(spriteText.getText());
+                                                element.setWeakToId(weakToComboBox.getValue().getElementId());
+                                                element.setStrongToId(strongToComboBox.getValue().getElementId());
+                                                DBConnection.editElement(cell.getTableRow().getItem().getElementId(), element);
+                                                elements = FXCollections.observableList(DBConnection.getElements());
+                                                elementsTable.setItems(elements);
+                                                root.setRight(null);
+                                            }
+                                            catch(NumberFormatException ex){
+                                                Alert wrongNumberAlert = new Alert(Alert.AlertType.ERROR);
+                                                wrongNumberAlert.setContentText("Nie podano liczby");
+                                                wrongNumberAlert.show();
+                                            }
                                         } else {
                                             Alert wrongUrlAlert = new Alert(Alert.AlertType.ERROR);
-                                            wrongUrlAlert.setContentText("Podano bledny url");
+                                            wrongUrlAlert.setContentText("Podano błędny url");
                                             wrongUrlAlert.show();
                                         }
                                     });
@@ -675,10 +785,7 @@ public class Editor {
         elementTab.setClosable(false);
         tabPane.getTabs().addAll(enemyTab, itemTab, elementTab);
         return scene;
-        //TODO
-        // zabezpieczenia (parseInt, błędny url)
     }
-//basic concept of url validation
     public static boolean checkUrlValidation(String url) {
         try {
             Image testImage = new Image(url);

@@ -92,7 +92,10 @@ public class Game {
         do{
             newItemY = random.nextInt(9);
         } while(newItemY == player.getY());
-        ItemModel item = itemList.get(random.nextInt(itemList.size()));
+        ItemModel item;
+        do {
+            item = itemList.get(random.nextInt(itemList.size()));
+        } while(player.checkForWeapon(item));
         entityTable[newItemX][newItemY] = new Item(item);
     }
 

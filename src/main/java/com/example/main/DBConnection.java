@@ -39,7 +39,7 @@ public class DBConnection {
 
     public static EnemyModel getEnemy(int id){
         EntityManager em = getEntityManager();
-        TypedQuery<EnemyModel> enemyQuery = em.createQuery("SELECT e FROM EnemyModel e WHERE e.id_enemy="+id, EnemyModel.class);
+        TypedQuery<EnemyModel> enemyQuery = em.createQuery("SELECT e FROM EnemyModel e WHERE e.enemyId="+id, EnemyModel.class);
         EnemyModel enemy = enemyQuery.getSingleResult();
         em.close();
         return enemy;
@@ -100,8 +100,8 @@ public class DBConnection {
         ItemModel item = em.find(ItemModel.class, id);
         item.setName(newItem.getName());
         item.setSpriteURL(newItem.getSpriteURL());
-        item.setDmg_min(newItem.getDmg_min());
-        item.setDmg_max(newItem.getDmg_max());
+        item.setDmgMin(newItem.getDmgMin());
+        item.setDmgMax(newItem.getDmgMax());
         item.setType(newItem.getType());
         em.getTransaction().commit();
         em.close();

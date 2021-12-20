@@ -4,6 +4,7 @@
     -fx-background-repeat: no-repeat;
     -fx-background-size: 351px 452px;
     -fx-background-position: 103px 90px;
+    -fx-font: 12 Minecraft;
 }
 
 .pause-screen{
@@ -16,20 +17,16 @@
     -fx-pref-width: 1;
     -fx-opacity: 0;
 }
-.log-box .text-area .scroll-bar:horizontal {
+.log-box .scroll-bar:horizontal {
     -fx-pref-height: 1;
     -fx-opacity: 0;
 }
 .log-box {
-    -fx-font: 12 Minecraft;
     -fx-text-fill: #fff;
-}
-.text-area {
     -fx-focus-color: transparent;
     -fx-text-box-border: transparent;
-
 }
-.text-area .content {
+.log-box .content {
     -fx-background-color: #282633;
     -fx-border-color: #282633;
 }

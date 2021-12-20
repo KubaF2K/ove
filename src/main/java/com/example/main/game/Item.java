@@ -60,8 +60,8 @@ public class Item extends Entity{
     public Item(ItemModel model){
         super(new Image(model.getSpriteURL()));
         name = model.getName();
-        dmgMin = model.getDmg_min();
-        dmgMax = model.getDmg_max();
+        dmgMin = model.getDmgMin();
+        dmgMax = model.getDmgMax();
         type = model.getType();
         element = model.getElement();
     }
