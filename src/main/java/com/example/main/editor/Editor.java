@@ -21,11 +21,33 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
+import java.util.Objects;
+
 @SuppressWarnings("Duplicates")
 public class Editor {
     private static ObservableList<EnemyModel> enemies;
     private static ObservableList<ItemModel> items;
     private static ObservableList<Element> elements;
+
+    private EnemyModel getEnemyByDBID(int id){
+        for(EnemyModel e : enemies){
+            if(e.getEnemyId()==id) return e;
+        }
+        return null;
+    }
+    private ItemModel getItemByDBID(int id){
+        for(ItemModel i : items){
+            if(i.getItemId()==id) return i;
+        }
+        return null;
+    }
+    private static Element getElementByDBID(int id){
+        for (Element e : elements) {
+            if(e.getElementId()==id) return e;
+        }
+        return null;
+    }
+
     public static Scene getScene(){
         enemies = FXCollections.observableList(DBConnection.getEnemies());
         items = FXCollections.observableList(DBConnection.getItems());
@@ -81,11 +103,29 @@ public class Editor {
                                     else setText("Brak");
                                 }
                             });
+                            itemComboBox.setButtonCell(new ListCell<>() {
+                                @Override
+                                protected void updateItem(ItemModel s, boolean b) {
+                                    super.updateItem(s, b);
+                                    if (s != null)
+                                        setText(s.getName());
+                                    else setText("Brak");
+                                }
+                            });
                         itemBox.getChildren().addAll(itemLabel, itemComboBox);
                         HBox elementBox = new HBox(10);
                             Label elementLabel = new Label("Element:");
                             ComboBox<Element> elementComboBox = new ComboBox<>(elements);
                             elementComboBox.setCellFactory(c -> new ListCell<>(){
+                                @Override
+                                protected void updateItem(Element element, boolean b) {
+                                    super.updateItem(element, b);
+                                    if(element != null)
+                                        setText(element.getName());
+                                    else setText("Brak");
+                                }
+                            });
+                            elementComboBox.setButtonCell(new ListCell<>(){
                                 @Override
                                 protected void updateItem(Element element, boolean b) {
                                     super.updateItem(element, b);
@@ -146,6 +186,15 @@ public class Editor {
                             Label elementLabel = new Label("Element:");
                             ComboBox<Element> elementComboBox = new ComboBox<>(elements);
                             elementComboBox.setCellFactory(c -> new ListCell<>(){
+                                @Override
+                                protected void updateItem(Element element, boolean b) {
+                                    super.updateItem(element, b);
+                                    if(element != null)
+                                        setText(element.getName());
+                                    else setText("Brak");
+                                }
+                            });
+                            elementComboBox.setButtonCell(new ListCell<>(){
                                 @Override
                                 protected void updateItem(Element element, boolean b) {
                                     super.updateItem(element, b);
@@ -252,11 +301,27 @@ public class Editor {
                                     else setText(element.getName());
                                 }
                             });
+                            weakToComboBox.setButtonCell(new ListCell<>(){
+                                @Override
+                                protected void updateItem(Element element, boolean b) {
+                                    super.updateItem(element, b);
+                                    if(element == null) setText("Nie ustawiono");
+                                    else setText(element.getName());
+                                }
+                            });
                         weakToBox.getChildren().addAll(weakToLabel, weakToComboBox);
                         HBox strongToBox = new HBox(10);
                             Label strongToLabel = new Label("Mocne przeciw:");
                             ComboBox<Element> strongToComboBox = new ComboBox<>(elements);
                             strongToComboBox.setCellFactory(c -> new ListCell<>(){
+                                @Override
+                                protected void updateItem(Element element, boolean b) {
+                                    super.updateItem(element, b);
+                                    if(element == null) setText("Nie ustawiono");
+                                    else setText(element.getName());
+                                }
+                            });
+                            strongToComboBox.setButtonCell(new ListCell<>(){
                                 @Override
                                 protected void updateItem(Element element, boolean b) {
                                     super.updateItem(element, b);
@@ -305,7 +370,7 @@ public class Editor {
         root.setTop(menuBar);
 
             TableColumn<EnemyModel, Integer> enemyIdCol = new TableColumn<>("ID");
-                enemyIdCol.setCellValueFactory(new PropertyValueFactory<>("id_enemy"));
+                enemyIdCol.setCellValueFactory(new PropertyValueFactory<>("enemyId"));
                 enemyIdCol.setMinWidth(100);
             TableColumn<EnemyModel, String> enemyNameCol = new TableColumn<>("Nazwa");
                 enemyNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -397,12 +462,30 @@ public class Editor {
                                 else setText("Brak");
                             }
                         });
+                        itemComboBox.setButtonCell(new ListCell<>() {
+                            @Override
+                            protected void updateItem(ItemModel s, boolean b) {
+                                super.updateItem(s, b);
+                                if (s != null)
+                                    setText(s.getName());
+                                else setText("Brak");
+                            }
+                        });
                         itemComboBox.getSelectionModel().select(editCell.getTableRow().getItem().getItemModel());
                         itemBox.getChildren().addAll(itemLabel, itemComboBox);
                         HBox elementBox = new HBox(10);
                             Label elementLabel = new Label("Element:");
                             ComboBox<Element> elementComboBox = new ComboBox<>(elements);
                             elementComboBox.setCellFactory(c -> new ListCell<>(){
+                                @Override
+                                protected void updateItem(Element element, boolean b) {
+                                    super.updateItem(element, b);
+                                    if(element != null)
+                                        setText(element.getName());
+                                    else setText("Brak");
+                                }
+                            });
+                            elementComboBox.setButtonCell(new ListCell<>(){
                                 @Override
                                 protected void updateItem(Element element, boolean b) {
                                     super.updateItem(element, b);
@@ -546,6 +629,15 @@ public class Editor {
                                         else setText("Brak");
                                     }
                                 });
+                                elementComboBox.setButtonCell(new ListCell<>(){
+                                    @Override
+                                    protected void updateItem(Element element, boolean b) {
+                                        super.updateItem(element, b);
+                                        if(element != null)
+                                            setText(element.getName());
+                                        else setText("Brak");
+                                    }
+                                });
                                 elementBox.getChildren().addAll(elementLabel, elementComboBox);
                                 HBox buttons = new HBox(10);
                                     Button btnAdd = new Button("Edytuj");
@@ -656,7 +748,7 @@ public class Editor {
                     if(e.getValue().getWeakToId() == -1) val = new Label("Nie ustawiono");
                     else{
                         Rectangle rect = new Rectangle(32, 32);
-                        Image sprite = new Image(DBConnection.getElement(e.getValue().getWeakToId()).getSpriteURL());
+                        Image sprite = new Image(Objects.requireNonNull(getElementByDBID(e.getValue().getWeakToId())).getSpriteURL());
                         rect.setFill(new ImagePattern(sprite));
                         val = rect;
                     }
@@ -669,7 +761,7 @@ public class Editor {
                     if(e.getValue().getStrongToId() == -1) val = new Label("Nie ustawiono");
                     else{
                         Rectangle rect = new Rectangle(32, 32);
-                        Image sprite = new Image(DBConnection.getElement(e.getValue().getStrongToId()).getSpriteURL());
+                        Image sprite = new Image(Objects.requireNonNull(getElementByDBID(e.getValue().getStrongToId())).getSpriteURL());
                         rect.setFill(new ImagePattern(sprite));
                         val = rect;
                     }
@@ -710,8 +802,17 @@ public class Editor {
                                         else setText("Brak");
                                     }
                                 });
+                                weakToComboBox.setButtonCell(new ListCell<>(){
+                                    @Override
+                                    protected void updateItem(Element element, boolean b) {
+                                        super.updateItem(element, b);
+                                        if(element != null)
+                                            setText(element.getName());
+                                        else setText("Brak");
+                                    }
+                                });
                                 if(cell.getTableRow().getItem().getWeakToId() != -1)
-                                    weakToComboBox.getSelectionModel().select(DBConnection.getElement(cell.getTableRow().getItem().getWeakToId()));
+                                    weakToComboBox.getSelectionModel().select(getElementByDBID(cell.getTableRow().getItem().getWeakToId()));
                             weakToBox.getChildren().addAll(weakToLabel, weakToComboBox);
                             HBox strongToBox = new HBox(10);
                                 Label strongToLabel = new Label("Mocne przeciw:");
@@ -725,8 +826,17 @@ public class Editor {
                                         else setText("Brak");
                                     }
                                 });
+                                strongToComboBox.setButtonCell(new ListCell<>(){
+                                    @Override
+                                    protected void updateItem(Element element, boolean b) {
+                                        super.updateItem(element, b);
+                                        if(element != null)
+                                            setText(element.getName());
+                                        else setText("Brak");
+                                    }
+                                });
                                 if(cell.getTableRow().getItem().getStrongToId()!= -1)
-                                    strongToComboBox.getSelectionModel().select(DBConnection.getElement(cell.getTableRow().getItem().getStrongToId()));
+                                    strongToComboBox.getSelectionModel().select(getElementByDBID(cell.getTableRow().getItem().getStrongToId()));
                             strongToBox.getChildren().addAll(strongToLabel, strongToComboBox);
                             HBox buttons = new HBox(10);
                                 Button btnEdit = new Button("Edytuj");
