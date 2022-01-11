@@ -59,6 +59,7 @@ public class Editor {
         elements.add(null);
 
         BorderPane root = new BorderPane();
+        root.getStylesheets().add("file:res/styles/editor.css");
         TabPane tabPane = new TabPane();
             TableView<EnemyModel> enemiesTable = new TableView<>(enemies);
             TableView<ItemModel> itemsTable = new TableView<>(items);
@@ -80,6 +81,7 @@ public class Editor {
                     VBox sidebar = new VBox(10);
                         HBox nameBox = new HBox(10);
                             Label nameLabel = new Label("Nazwa:");
+                            nameLabel.setTextFill(Color.WHITE);
                             TextField nameText = new TextField();
                         nameBox.getChildren().addAll(nameLabel, nameText);
                         HBox spriteBox = new HBox(10);
@@ -380,10 +382,10 @@ public class Editor {
 
             TableColumn<EnemyModel, Integer> enemyIdCol = new TableColumn<>("ID");
                 enemyIdCol.setCellValueFactory(new PropertyValueFactory<>("enemyId"));
-                enemyIdCol.setMinWidth(100);
+                enemyIdCol.setMinWidth(150);
             TableColumn<EnemyModel, String> enemyNameCol = new TableColumn<>("Nazwa");
                 enemyNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-                enemyNameCol.setMinWidth(100);
+                enemyNameCol.setMinWidth(150);
             TableColumn<EnemyModel, Rectangle> enemySpriteCol = new TableColumn<>("Sprite");
                 enemySpriteCol.setCellValueFactory(i -> {
                     Rectangle spriteRect = new Rectangle(32,32);
@@ -394,11 +396,10 @@ public class Editor {
                     else spriteRect.setFill(Color.rgb(0,0,0,0));
                     return Bindings.createObjectBinding(() -> spriteRect);
                 });
-                enemySpriteCol.setMinWidth(100);
-            //TODO enemyElementCol
+                enemySpriteCol.setMinWidth(150);
             TableColumn<EnemyModel, Integer> enemyHPCol = new TableColumn<>("Zdrowie");
                 enemyHPCol.setCellValueFactory(new PropertyValueFactory<>("health"));
-                enemyHPCol.setMinWidth(100);
+                enemyHPCol.setMinWidth(150);
             TableColumn<EnemyModel, String> enemyDmgCol = new TableColumn<>("Obrażenia");
                 enemyDmgCol.setCellValueFactory(i -> {
                     String dmg;
@@ -407,7 +408,7 @@ public class Editor {
                     else dmg = "";
                     return Bindings.createObjectBinding(() -> dmg);
                 });
-                enemyDmgCol.setMinWidth(100);
+                enemyDmgCol.setMinWidth(150);
             TableColumn<EnemyModel, Node> enemyItemCol = new TableColumn<>("Przedmiot");
                 enemyItemCol.setCellValueFactory(i -> {
                     Node val = new Label("Brak");
@@ -423,7 +424,7 @@ public class Editor {
                     Node finalVal = val;
                     return Bindings.createObjectBinding(() -> finalVal);
                 });
-                enemyItemCol.setMinWidth(100);
+                enemyItemCol.setMinWidth(150);
             TableColumn<EnemyModel, Node> enemyElementCol = new TableColumn<>("Element");
                 enemyElementCol.setCellValueFactory(i -> {
                     Node val = new Label("Normalny");
@@ -559,7 +560,7 @@ public class Editor {
                     editBtns.getChildren().addAll(editBtn, delBtn);
                     return editCell;
                 });
-                enemyEditCol.setMinWidth(150);
+                enemyEditCol.setMinWidth(180);
             enemiesTable.getColumns().add(enemyIdCol);
             enemiesTable.getColumns().add(enemyNameCol);
             enemiesTable.getColumns().add(enemySpriteCol);
@@ -570,10 +571,10 @@ public class Editor {
             enemiesTable.getColumns().add(enemyEditCol);
             TableColumn<ItemModel, Integer> itemIdCol = new TableColumn<>("ID");
                 itemIdCol.setCellValueFactory(new PropertyValueFactory<>("itemId"));
-                itemIdCol.setMinWidth(100);
+                itemIdCol.setMinWidth(150);
             TableColumn<ItemModel, String> itemNameCol = new TableColumn<>("Nazwa");
                 itemNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-                itemNameCol.setMinWidth(100);
+                itemNameCol.setMinWidth(150);
             TableColumn<ItemModel, Rectangle> itemSpriteCol = new TableColumn<>("Sprite");
                 itemSpriteCol.setCellValueFactory(e -> {
                     Rectangle rect = new Rectangle(32,32);
@@ -584,7 +585,7 @@ public class Editor {
                     else rect.setFill(Color.rgb(0,0,0,0));
                     return Bindings.createObjectBinding(() -> rect);
                 });
-                itemSpriteCol.setMinWidth(100);
+                itemSpriteCol.setMinWidth(150);
             TableColumn<ItemModel, String> itemDmgCol = new TableColumn<>("HP/Obrażenia");
                 itemDmgCol.setCellValueFactory(e -> {
                     String text;
@@ -593,7 +594,7 @@ public class Editor {
                     else text = "";
                     return Bindings.createObjectBinding(() -> text);
                 });
-                itemDmgCol.setMinWidth(100);
+                itemDmgCol.setMinWidth(150);
             TableColumn<ItemModel, String> itemTypeCol = new TableColumn<>("Typ");
                 itemTypeCol.setCellValueFactory(e -> {
                     String text = "";
@@ -605,7 +606,7 @@ public class Editor {
                     String finalText = text;
                     return Bindings.createObjectBinding(() -> finalText);
                 });
-                itemTypeCol.setMinWidth(100);
+                itemTypeCol.setMinWidth(150);
             TableColumn<ItemModel, Node> itemElementCol = new TableColumn<>("Element");
                 itemElementCol.setCellValueFactory(e -> {
                     Node val = new Label("Normalny");
@@ -764,7 +765,7 @@ public class Editor {
                     editBtns.getChildren().addAll(editBtn, deleteBtn);
                     return editCell;
                 });
-                itemEditCol.setMinWidth(150);
+                itemEditCol.setMinWidth(180);
             itemsTable.getColumns().add(itemIdCol);
             itemsTable.getColumns().add(itemNameCol);
             itemsTable.getColumns().add(itemSpriteCol);
@@ -774,10 +775,10 @@ public class Editor {
             itemsTable.getColumns().add(itemEditCol);
             TableColumn<Element, Integer> elementIdCol = new TableColumn<>("ID");
                 elementIdCol.setCellValueFactory(new PropertyValueFactory<>("elementId"));
-                elementIdCol.setMinWidth(100);
+                elementIdCol.setMinWidth(150);
             TableColumn<Element, String> elementNameCol = new TableColumn<>("Nazwa");
                 elementNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-                elementNameCol.setMinWidth(100);
+                elementNameCol.setMinWidth(150);
             TableColumn<Element, Rectangle> elementSpriteCol = new TableColumn<>("Sprite");
                 elementSpriteCol.setCellValueFactory(e -> {
                     Rectangle rect = new Rectangle(32, 32);
@@ -788,7 +789,7 @@ public class Editor {
                     else rect.setFill(Color.rgb(0,0,0,0));
                     return Bindings.createObjectBinding(() -> rect);
                 });
-                elementSpriteCol.setMinWidth(100);
+                elementSpriteCol.setMinWidth(150);
             TableColumn<Element, Node> elementWeakToCol = new TableColumn<>("Słabe przeciw");
                 elementWeakToCol.setCellValueFactory(e -> {
                     Node val;
@@ -804,7 +805,7 @@ public class Editor {
                     else val = new Label("");
                     return Bindings.createObjectBinding(() -> val);
                 });
-                elementWeakToCol.setMinWidth(100);
+                elementWeakToCol.setMinWidth(150);
             TableColumn<Element, Node> elementStrongToCol = new TableColumn<>("Mocne przeciw");
                 elementStrongToCol.setCellValueFactory(e -> {
                     Node val;
@@ -820,7 +821,7 @@ public class Editor {
                     else val = new Label("");
                     return Bindings.createObjectBinding(() -> val);
                 });
-                elementStrongToCol.setMinWidth(100);
+                elementStrongToCol.setMinWidth(150);
             TableColumn<Element, HBox> elementEditCol = new TableColumn<>("Edycja");
                 elementEditCol.setCellFactory(e -> {
                     HBox editBox = new HBox(10);
@@ -938,7 +939,7 @@ public class Editor {
                     editBox.getChildren().addAll(editBtn, delBtn);
                     return cell;
                 });
-                elementEditCol.setMinWidth(150);
+                elementEditCol.setMinWidth(180);
             elementsTable.getColumns().add(elementIdCol);
             elementsTable.getColumns().add(elementNameCol);
             elementsTable.getColumns().add(elementSpriteCol);

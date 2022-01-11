@@ -1,0 +1,12 @@
+.tab, .enemiesTable, .label, .table-view, .table-cell, .table-column, .menu-bar, .table-view .filler, .menu-item, .tab-label, .tab-pane .tab-header-area, .tab-header-background, .root{
+    -fx-background-color: #282633;
+    -fx-font: 16 Minecraft;
+    -fx-text-fill: #FFFFFF;
+    -fx-text-alignment: center;
+    -fx-border-color: #282633;
+    -fx-border-width: 2px;
+}
+.table-row-cell {
+    -fx-background-color: #282633;
+}
+
