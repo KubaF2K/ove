@@ -105,7 +105,7 @@ public class Enemy extends Mob{
             if(Game.player.getHp()==0){
                 Game.player = null;
                 Game.entityTable[x][y] = new Entity();
-                //Main.setGameOver();
+                Game.setGameOver();
             }
         }
         else if(Game.entityTable[x][y].getClass().getSimpleName().equals("Item")) { //Zderzenie z przedmiotem

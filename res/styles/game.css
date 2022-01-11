@@ -13,6 +13,12 @@
     -fx-background-color: rgba(0,0,0,0.7);
 }
 
+.end-screen{
+    -fx-height: 480px;
+    -fx-width: 680px;
+    -fx-background-color: rgba(0,0,0,0.7);
+}
+
 .log-box .scroll-bar:vertical {
     -fx-pref-width: 1;
     -fx-opacity: 0;

@@ -3,6 +3,7 @@ package com.example.main.game;
 import com.example.main.DBConnection;
 import com.example.main.models.EnemyModel;
 import com.example.main.models.ItemModel;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -24,6 +25,8 @@ public class Game {
     private static Text hpText;
         private static Text itemText;
     public static LogBox logBox;
+
+    public static StackPane mainStack = new StackPane();
 
     public static Entity[][] entityTable = new Entity[9][9]; //Główna tablica
     public static Player player; //Awatar
@@ -104,7 +107,7 @@ public class Game {
         List<Integer> moved = new ArrayList<>();
         for(int i=0; i<9; i++){
             for(int j=0; j<9; j++){
-                if(entityTable[i][j].getClass().getSimpleName().equals("Enemy")){
+                if(entityTable[i][j].getClass().getSimpleName().equals("Enemy") && player != null){
                     Enemy enemy = (Enemy) entityTable[i][j];
                     if(moved.contains(enemy.getId())) continue;
                     if (enemy.getX() < player.getX()) {
@@ -131,7 +134,6 @@ public class Game {
     }
     public static Scene getScene()  {
         BorderPane root = new BorderPane();
-        StackPane mainStack = new StackPane();
         mainGrid = new GridPane();
         mainGrid.setHgap(5);
         mainGrid.setVgap(5);
@@ -188,13 +190,15 @@ public class Game {
         mainScene.setOnKeyPressed(keyEvent -> {
             if(keyEvent.getCode().equals(KeyCode.ESCAPE)){
                 paused.set(!paused.get());
-                if(paused.get()) {
+                if(paused.get() && player != null) {
                     mainStack.getChildren().add(pauseScreen);
                 }
                 else {
+                    if(player == null)
+                        Platform.exit();
                     mainStack.getChildren().remove(pauseScreen);
                 }
-            } else if(!paused.get()) {
+            } else if(!paused.get() && player != null) {
                 if (keyEvent.getCode().equals(KeyCode.UP) || keyEvent.getCode().equals(KeyCode.NUMPAD8)) {
                     player.moveUp();
                     moveEnemies();
@@ -255,6 +259,24 @@ public class Game {
         });
         root.getStyleClass().add("root");
         return mainScene;
+    }
+
+    public static void setGameOver() {
+        VBox endScreen = new VBox();
+        Text endTextMain = new Text("Death 💀\n");
+        endTextMain.setFill(Color.WHITE);
+        endTextMain.setStyle("-fx-font: 48 Minecraft;");
+
+
+        Text endTextAdd = new Text("Press esc to close game");
+        endTextAdd.setFill(Color.WHITE);
+        endTextAdd.setStyle("-fx-font: 24 Minecraft;");
+
+        endScreen.setAlignment(Pos.CENTER);
+        endScreen.getChildren().add(endTextMain);
+        endScreen.getChildren().add(endTextAdd);
+        endScreen.getStyleClass().add("end-screen");
+        mainStack.getChildren().add(endScreen);
     }
 }
 //TODO

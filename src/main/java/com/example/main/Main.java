@@ -21,8 +21,8 @@ public class Main extends Application{
         mainStage = stage;
         VBox root = new VBox(10);
         root.getStyleClass().add("root");
-        root.setAlignment(Pos.CENTER_LEFT);
-        Label title = new Label("Gra");
+        root.setAlignment(Pos.CENTER);
+        Label title = new Label("Elves vs Orcs");
         title.getStyleClass().add("title");
         Font.loadFont("file:res/fonts/Minecraft.ttf", 24);
 
@@ -32,15 +32,16 @@ public class Main extends Application{
             mainStage.centerOnScreen();
             mainStage.setTitle("Waow");
             mainStage.setScene(gameScene);
-            mainStage.setResizable(false);
+
         });
-        Button btnEditor = new Button("Edit");
+        Button btnEditor = new Button("Edytuj");
         btnEditor.setOnAction(actionEvent -> {
             Scene editorScene = Editor.getScene();
             mainStage.setTitle("Edytor");
+            mainStage.setResizable(true);
             mainStage.setScene(editorScene);
         });
-        Button btnExit = new Button("Exit");
+        Button btnExit = new Button("Wyjdz");
         btnExit.setOnAction(actionEvent -> Platform.exit());
         root.getChildren().addAll(title, btnGame, btnEditor, btnExit);
         mainScene = new Scene(root, 640, 480);
@@ -51,11 +52,14 @@ public class Main extends Application{
 
         btnExit.setMinSize(320,40);
 
+        mainStage.setResizable(false);
+
         mainStage.setScene(mainScene);
         mainStage.show();
     }
 
     public static void resetScene(){
+        mainStage.setResizable(false);
         mainStage.setScene(mainScene);
     }
 

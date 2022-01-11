@@ -492,7 +492,8 @@ public class Editor {
                                 else setText("Brak");
                             }
                         });
-                        itemComboBox.getSelectionModel().select(getItemByDBID(editCell.getTableRow().getItem().getItemModel().getItemId()));
+                        if(editCell.getTableRow().getItem().getItemModel() != null)
+                            itemComboBox.getSelectionModel().select(getItemByDBID(editCell.getTableRow().getItem().getItemModel().getItemId()));
                         itemBox.getChildren().addAll(itemLabel, itemComboBox);
                         HBox elementBox = new HBox(10);
                             Label elementLabel = new Label("Element:");
@@ -515,7 +516,8 @@ public class Editor {
                                     else setText("Brak");
                                 }
                             });
-                            elementComboBox.getSelectionModel().select(getElementByDBID(editCell.getTableRow().getItem().getElement().getElementId()));
+                            if(editCell.getTableRow().getItem().getElement() != null)
+                                    elementComboBox.getSelectionModel().select(getElementByDBID(editCell.getTableRow().getItem().getElement().getElementId()));
                         elementBox.getChildren().addAll(elementLabel, elementComboBox);
                         HBox buttons = new HBox(10);
                         Button btnAdd = new Button("Edytuj");
@@ -674,7 +676,8 @@ public class Editor {
                                         else setText("Brak");
                                     }
                                 });
-                                elementComboBox.getSelectionModel().select(getElementByDBID(editCell.getTableRow().getItem().getElement().getElementId()));
+                                if(editCell.getTableRow().getItem().getElement() != null)
+                                    elementComboBox.getSelectionModel().select(getElementByDBID(editCell.getTableRow().getItem().getElement().getElementId()));
                                 elementBox.getChildren().addAll(elementLabel, elementComboBox);
                                 HBox buttons = new HBox(10);
                                     Button btnAdd = new Button("Edytuj");
