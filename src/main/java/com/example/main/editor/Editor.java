@@ -761,6 +761,9 @@ public class Editor {
                         items = FXCollections.observableList(DBConnection.getItems());
                         items.add(null);
                         itemsTable.setItems(items);
+                        enemies = FXCollections.observableList(DBConnection.getEnemies());
+                        enemies.add(null);
+                        enemiesTable.setItems(enemies);
                         root.setRight(null);
                     });
                     editBtns.getChildren().addAll(editBtn, deleteBtn);
@@ -936,6 +939,12 @@ public class Editor {
                         elements = FXCollections.observableList(DBConnection.getElements());
                         elements.add(null);
                         elementsTable.setItems(elements);
+                        enemies = FXCollections.observableList(DBConnection.getEnemies());
+                        enemies.add(null);
+                        enemiesTable.setItems(enemies);
+                        items = FXCollections.observableList(DBConnection.getItems());
+                        items.add(null);
+                        itemsTable.setItems(items);
                     });
                     editBox.getChildren().addAll(editBtn, delBtn);
                     return cell;

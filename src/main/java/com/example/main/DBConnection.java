@@ -130,14 +130,49 @@ public class DBConnection {
     public static void deleteItem(int id){
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
-        em.remove(em.find(ItemModel.class, id));
+        ItemModel toDelete = em.find(ItemModel.class, id);
+        TypedQuery<EnemyModel> enemyQuery = em.createQuery("SELECT e FROM EnemyModel e WHERE e.itemModel = :td", EnemyModel.class);
+        enemyQuery.setParameter("td", toDelete);
+        List<EnemyModel> enemiesToFix = enemyQuery.getResultList();
+        for (EnemyModel enemy :
+                enemiesToFix) {
+            enemy.setItemModel(null);
+        }
+        em.remove(toDelete);
         em.getTransaction().commit();
         em.close();
     }
     public static void deleteElement(int id){
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
-        em.remove(em.find(Element.class, id));
+        Element toDelete = em.find(Element.class, id);
+        TypedQuery<EnemyModel> enemyQuery = em.createQuery("SELECT e FROM EnemyModel e WHERE e.element = :td", EnemyModel.class);
+        enemyQuery.setParameter("td", toDelete);
+        List<EnemyModel> enemiesToFix = enemyQuery.getResultList();
+        for (EnemyModel enemy :
+                enemiesToFix) {
+            enemy.setElement(null);
+        }
+        TypedQuery<ItemModel> itemQuery = em.createQuery("SELECT i FROM ItemModel i WHERE i.element = :td", ItemModel.class);
+        itemQuery.setParameter("td", toDelete);
+        List<ItemModel> itemsToFix = itemQuery.getResultList();
+        for (ItemModel item :
+                itemsToFix) {
+            item.setElement(null);
+        }
+        TypedQuery<Element> weakElementQuery = em.createQuery("SELECT e FROM Element e WHERE e.weakToId = "+id, Element.class);
+        List<Element> weakElementsToFix = weakElementQuery.getResultList();
+        for (Element element :
+                weakElementsToFix) {
+            element.setWeakToId(-1);
+        }
+        TypedQuery<Element> strongElementQuery = em.createQuery("SELECT e FROM Element e WHERE e.strongToId = "+id, Element.class);
+        List<Element> strongElementsToFix = strongElementQuery.getResultList();
+        for (Element element :
+                strongElementsToFix) {
+            element.setStrongToId(-1);
+        }
+        em.remove(toDelete);
         em.getTransaction().commit();
         em.close();
     }
