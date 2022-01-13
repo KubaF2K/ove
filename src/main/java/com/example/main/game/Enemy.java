@@ -1,5 +1,6 @@
 package com.example.main.game;
 
+import com.example.main.editor.Editor;
 import com.example.main.models.Element;
 import com.example.main.models.EnemyModel;
 import javafx.scene.image.Image;
@@ -44,7 +45,7 @@ public class Enemy extends Mob{
         this.carrying = carrying;
     }
     public Enemy(EnemyModel model, int x, int y){
-        super(new Image(model.getSpriteURL()), model.getHealth(), x, y);
+        super(new Image(Game.urlChooser("test")), model.getHealth(), x, y);
         name = model.getName();
         dmgMin = model.getDmgMin();
         dmgMax = model.getDmgMax();
@@ -130,4 +131,6 @@ public class Enemy extends Mob{
     public int hashCode() {
         return Objects.hash(enemyId);
     }
+
 }
+

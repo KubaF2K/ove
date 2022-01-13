@@ -2,6 +2,7 @@ package com.example.main.editor;
 
 import com.example.main.DBConnection;
 import com.example.main.Main;
+import com.example.main.game.Game;
 import com.example.main.game.Item;
 import com.example.main.models.Element;
 import com.example.main.models.EnemyModel;
@@ -390,7 +391,7 @@ public class Editor {
                 enemySpriteCol.setCellValueFactory(i -> {
                     Rectangle spriteRect = new Rectangle(32,32);
                     if(i.getValue() != null) {
-                        Image sprite = new Image(i.getValue().getSpriteURL());
+                        Image sprite = new Image(Game.urlChooser(i.getValue().getSpriteURL()));
                         spriteRect.setFill(new ImagePattern(sprite));
                     }
                     else spriteRect.setFill(Color.rgb(0,0,0,0));
@@ -414,7 +415,7 @@ public class Editor {
                     Node val = new Label("Brak");
                     if(i.getValue()!=null) {
                         if (i.getValue().getItemModel() != null) {
-                            Image sprite = new Image(i.getValue().getItemModel().getSpriteURL());
+                            Image sprite = new Image(Game.urlChooser(i.getValue().getItemModel().getSpriteURL()));
                             Rectangle spriteRect = new Rectangle(32, 32);
                             spriteRect.setFill(new ImagePattern(sprite));
                             val = spriteRect;
@@ -430,7 +431,7 @@ public class Editor {
                     Node val = new Label("Normalny");
                     if(i.getValue()!=null) {
                         if (i.getValue().getElement() != null) {
-                            Image sprite = new Image(i.getValue().getElement().getSpriteURL());
+                            Image sprite = new Image(Game.urlChooser(i.getValue().getElement().getSpriteURL()));
                             Rectangle spriteRect = new Rectangle(32, 32);
                             spriteRect.setFill(new ImagePattern(sprite));
                             val = spriteRect;
@@ -579,7 +580,7 @@ public class Editor {
                 itemSpriteCol.setCellValueFactory(e -> {
                     Rectangle rect = new Rectangle(32,32);
                     if(e.getValue()!=null) {
-                        Image sprite = new Image(e.getValue().getSpriteURL());
+                        Image sprite = new Image(Game.urlChooser(e.getValue().getSpriteURL()));
                         rect.setFill(new ImagePattern(sprite));
                     }
                     else rect.setFill(Color.rgb(0,0,0,0));
@@ -613,7 +614,7 @@ public class Editor {
                     if(e.getValue()!=null) {
                         if (e.getValue().getType() != Item.Type.Weapon) val = new Label("Nie dotyczy");
                         else if (e.getValue().getElement() != null) {
-                            Image sprite = new Image(e.getValue().getElement().getSpriteURL());
+                            Image sprite = new Image(Game.urlChooser(e.getValue().getElement().getSpriteURL()));
                             Rectangle spriteRect = new Rectangle(32, 32);
                             spriteRect.setFill(new ImagePattern(sprite));
                             val = spriteRect;
@@ -783,7 +784,7 @@ public class Editor {
                 elementSpriteCol.setCellValueFactory(e -> {
                     Rectangle rect = new Rectangle(32, 32);
                     if(e.getValue()!=null) {
-                        Image sprite = new Image(e.getValue().getSpriteURL());
+                        Image sprite = new Image(Game.urlChooser(e.getValue().getSpriteURL()));
                         rect.setFill(new ImagePattern(sprite));
                     }
                     else rect.setFill(Color.rgb(0,0,0,0));
@@ -797,7 +798,7 @@ public class Editor {
                         if (e.getValue().getWeakToId() == -1) val = new Label("Nie ustawiono");
                         else {
                             Rectangle rect = new Rectangle(32, 32);
-                            Image sprite = new Image(Objects.requireNonNull(getElementByDBID(e.getValue().getWeakToId())).getSpriteURL());
+                            Image sprite = new Image(Game.urlChooser(Objects.requireNonNull(getElementByDBID(e.getValue().getWeakToId())).getSpriteURL()));
                             rect.setFill(new ImagePattern(sprite));
                             val = rect;
                         }
@@ -813,7 +814,7 @@ public class Editor {
                         if (e.getValue().getStrongToId() == -1) val = new Label("Nie ustawiono");
                         else {
                             Rectangle rect = new Rectangle(32, 32);
-                            Image sprite = new Image(Objects.requireNonNull(getElementByDBID(e.getValue().getStrongToId())).getSpriteURL());
+                            Image sprite = new Image(Game.urlChooser(Objects.requireNonNull(getElementByDBID(e.getValue().getStrongToId())).getSpriteURL()));
                             rect.setFill(new ImagePattern(sprite));
                             val = rect;
                         }

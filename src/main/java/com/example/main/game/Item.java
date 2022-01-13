@@ -58,7 +58,7 @@ public class Item extends Entity{
         type = Type.Weapon;
     }
     public Item(ItemModel model){
-        super(new Image(model.getSpriteURL()));
+        super(new Image(Game.urlChooser("test")));
         name = model.getName();
         dmgMin = model.getDmgMin();
         dmgMax = model.getDmgMax();

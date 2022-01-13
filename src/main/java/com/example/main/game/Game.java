@@ -1,6 +1,7 @@
 package com.example.main.game;
 
 import com.example.main.DBConnection;
+import com.example.main.editor.Editor;
 import com.example.main.models.EnemyModel;
 import com.example.main.models.ItemModel;
 import javafx.application.Platform;
@@ -278,7 +279,13 @@ public class Game {
         endScreen.getStyleClass().add("end-screen");
         mainStack.getChildren().add(endScreen);
     }
+
+    public static String urlChooser(String url) {
+        if(Editor.checkUrlValidation(url)) {
+            return url;
+        }
+        else {
+            return "file:res/img/placeHolder.png";
+        }
+    }
 }
-//TODO
-// gameover
-// wyglad
