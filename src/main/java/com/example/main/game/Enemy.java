@@ -45,7 +45,7 @@ public class Enemy extends Mob{
         this.carrying = carrying;
     }
     public Enemy(EnemyModel model, int x, int y){
-        super(new Image(Game.urlChooser("test")), model.getHealth(), x, y);
+        super(new Image(Game.urlChooser(model.getSpriteURL())), model.getHealth(), x, y);
         name = model.getName();
         dmgMin = model.getDmgMin();
         dmgMax = model.getDmgMax();
