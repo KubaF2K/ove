@@ -1,50 +1,84 @@
-# Wymagania do projektu
-W ramach projektu studenci wykonują aplikację desktopową w języku Java. Aplikacja ma na celu łączenie z się zaprojektowaną i utworzoną uprzednio relacyjną bazą danych oraz jej obsługę. Schemat bazy projektuje student i konsultuje z prowadzącym. Zaleca się, aby baza danych składała się z co najmniej trzech tabel połączonych relacjami.
-Obsługa bazy danych polegać ma na tym, że aplikacja ma udostępniać funkcjonalności CRUD, czyli dodawanie (tworzenie nowych rekordów) (Create), wyświetlanie pojedynczych rekordów i całych list (Read), aktualizację (Update) i usuwanie rekordów (Delete) dla tabel. Do łączenia się i komunikacji z bazą danych można użyć JDBC lub Hibernate. Utworzona aplikacja pozwala na zarządzanie bazą poprzez GUI – graficzny interfejs użytkownika utworzony w bibliotece Swing lub JavaFX. Wygląd GUI nie jest narzucany, powinien być spójny i jak najbardziej intuicyjny. Dozwolone jest użycie SceneBuildera dla JavaFX lub innego graficznego narzędzia do tworzenia GUI (dla SWING takie narzędzie dostępne jest np. NetBeans). 
-
-Uzyskana ocena zależeć będzie od złożoności bazy danych, użytych technologii, np. wyżej ocenione zostaną aplikacje utworzone w konfiguracji JavaFX-Hibernate, niżej aplikacje utworzone w konfiguracji JavaFX-JDBC lub Swing-Hibernate, najniżej ocenione będą aplikacje utworzone w konfiguracji JDBC-Swing. Istotny wpływ na ocenę będzie miał wygląd i intuicyjność interfejsu użytkownika oraz struktura projektu aplikacji oraz złożoność obsługiwanej bazy danych.
-
 # Projekt zaliczeniowy z przedmiotu: _**Progrmowanie obiektowe 2**_
 
-# Temat projektu: 
-## Skład grupy: 
+# Temat projektu: Gra z wykorzystaniem bazy danych
+## Skład grupy: Jakub Foltarz, Kamil Kondziołka
 ## Specyfikacja projektu
-### Cel projektu :
+### Cel projektu : Stworzenie aplikacji z wykorzystaniem bazy danych
 #### Cele szczegółowe:
-   1. cel 1
-   2. cel 2
-   3. ...
+   1. Wykorzystac mozliwosci JavaFX
+   2. Wykorzystac mozliwosci Hibernate
 ### Funkcjonalności:
-   1. Funkcjonalność 1
-   2. Funkcjonalność 2
-   3. ...
+   1. Mozliwosc dodawania wlasnych przeciwnikow, przedmiotow i elementow do gry
+   2. Mozliwosc edycji domyslnych rekordow lub ich usuniecia
 ### Interfejs:
 
    <details>
        <summary>Ekran główny </summary>
-	
-![alt text][logo]
-
-           <p>Przedstawiono ...</p>
+           Ekran główny zawiera 3 przyciski, sluzace do przejscia na ekran gry, ekran sluzacy do edytowania oraz wyjscie z aplikacji
    </details>
 	<details>
-       <summary>Ekran ...</summary>
-
-![alt text][logo]
-           <p>Czego dotyczy?</p>
+       <summary>Ekran gry</summary>
+           Ekran gry zawiera informacje o wykonanych turach, przedmiocie trzymanym informacji o graczu, glowna plansze, oraz pasek z przedmiotami
+   </details>
+   <details>
+       <summary>Ekran edycji</summary>
+           Ekran edycji sa to wyswietlane w postaci tabeli dane pobierane z bazy danych z mozliwacia dodania edycji i usuniecia rekordow
    </details>
          
 ### Baza danych
+
 ####	Diagram ERD
+![image](https://i.gyazo.com/54da70ba618fac17c8643c30241f2932.png)
+
 ####	Skrypt do utworzenia struktury bazy danych
 
-## Wykorzystane technologie
+    create sequence HIBERNATE_SEQUENCE;
 
+    create table ELEMENT
+    (
+        ID_ELEMENT INTEGER not null
+            primary key,
+        NAME       VARCHAR(255),
+        SPRITE     VARCHAR(255),
+        STRONG_TO  INTEGER,
+        WEAK_TO    INTEGER
+    );
+
+    create table ITEM
+    (
+        ID_ITEM    INTEGER not null
+            primary key,
+        DMG_MAX    INTEGER,
+        DMG_MIN    INTEGER,
+        NAME       VARCHAR(255),
+        SPRITE     VARCHAR(255),
+        TYPE       INTEGER,
+        ID_ELEMENT INTEGER,
+        constraint FKLX87NCEXOM3SM7GYOW7JXMCYR
+            foreign key (ID_ELEMENT) references ELEMENT (ID_ELEMENT)
+    );
+
+    create table ENEMY
+    (
+        ID_ENEMY   INTEGER not null
+            primary key,
+        DMG_MAX    INTEGER,
+        DMG_MIN    INTEGER,
+        HEALTH     INTEGER,
+        NAME       VARCHAR(255),
+        SPRITE     VARCHAR(255),
+        ID_ELEMENT INTEGER,
+        ID_ITEM    INTEGER,
+        constraint FK7IGDJVH7ND9VLBMCMTI5JWH6A
+            foreign key (ID_ITEM) references ITEM (ID_ITEM),
+        constraint FKIX7GLU4EK87U7LM2SWUVBHHR5
+            foreign key (ID_ELEMENT) references ELEMENT (ID_ELEMENT)
+    );
+
+
+### Wykorzystane technologie:
+    1. JavaFX
+    2. Hibernate
+    3. H2
 ## Proces uruchomienia aplikacji (krok po kroku)
-
-### Potrzebne nazwy użytkowników do uruchomienia aplikacji
-
-
-[Przydatny link przy tworzeniu plików *.md ](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
-
-![image](https://user-images.githubusercontent.com/12736759/138092321-a8991f22-387f-4888-9ba2-9c448b35e2d5.png)
+Wypakowywujemy plik ver1.7z, uruchamiamy evo.jar
