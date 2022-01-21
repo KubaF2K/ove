@@ -5,24 +5,24 @@
 ## Specyfikacja projektu
 ### Cel projektu : Stworzenie aplikacji z wykorzystaniem bazy danych
 #### Cele szczegółowe:
-   1. Wykorzystac mozliwosci JavaFX
-   2. Wykorzystac mozliwosci Hibernate
+   1. Wykorzystać możliwości JavaFX
+   2. Wykorzystać możliwości Hibernate
 ### Funkcjonalności:
-   1. Mozliwosc dodawania wlasnych przeciwnikow, przedmiotow i elementow do gry
-   2. Mozliwosc edycji domyslnych rekordow lub ich usuniecia
+   1. Mozliwość dodawania własnych przeciwników, przedmiotów i elementów do gry
+   2. Mozliwość edycji domyślnych rekordów lub ich usunięcia
 ### Interfejs:
 
    <details>
-       <summary>Ekran główny </summary>
-           Ekran główny zawiera 3 przyciski, sluzace do przejscia na ekran gry, ekran sluzacy do edytowania oraz wyjscie z aplikacji
+       <summary>Ekran główny</summary>
+           Ekran główny zawiera 3 przyciski, służące do przejścia na ekran gry, ekran służący do edytowania oraz wyjście z aplikacji
    </details>
 	<details>
        <summary>Ekran gry</summary>
-           Ekran gry zawiera informacje o wykonanych turach, przedmiocie trzymanym informacji o graczu, glowna plansze, oraz pasek z przedmiotami
+           Ekran gry zawiera informacje o wykonanych turach, przedmiocie aktualnie trzymanym przez gracza, główną planszę, oraz pasek z przedmiotami
    </details>
    <details>
        <summary>Ekran edycji</summary>
-           Ekran edycji sa to wyswietlane w postaci tabeli dane pobierane z bazy danych z mozliwacia dodania edycji i usuniecia rekordow
+           Ekran edycji są to wyświetlane w postaci tabeli dane pobierane z bazy danych z możliwościa dodania, edycji, oraz usunięcia rekordów
    </details>
          
 ### Baza danych
