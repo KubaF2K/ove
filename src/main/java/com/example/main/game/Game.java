@@ -25,6 +25,7 @@ public class Game {
     private static HBox invGrid;
     private static Text hpText;
         private static Text itemText;
+        private static Rectangle elementImg;
     public static LogBox logBox;
 
     public static StackPane mainStack = new StackPane();
@@ -64,9 +65,22 @@ public class Game {
     static void updateInfoBox(){
         if(player==null) return;
         hpText.setText("HP: "+player.getHp());
-        if(player.getEquippedItem()!=null){ //TODO Element
-            if(player.getEquippedItem().getType()==Item.Type.Weapon) itemText.setText(player.getEquippedItem().getName()+"\nObrażenia: "+player.getEquippedItem().getDmgMin()+"-"+player.getEquippedItem().getDmgMax());
-            else if(player.getEquippedItem().getType()==Item.Type.Heal) itemText.setText(player.getEquippedItem().getName()+"\nLeczy "+player.getEquippedItem().getDmgMin()+" punktów zdrowia");
+        if(player.getEquippedItem()!=null){
+            if(player.getEquippedItem().getType()==Item.Type.Weapon){
+                if(player.getEquippedItem().getElement() == null) {
+                    itemText.setText(player.getEquippedItem().getName() + "\nObrażenia: " + player.getEquippedItem().getDmgMin() + "-" + player.getEquippedItem().getDmgMax());
+                    elementImg.setFill(Color.TRANSPARENT);
+                }
+                else {
+                    itemText.setText(player.getEquippedItem().getName() + "\nObrażenia: " + player.getEquippedItem().getDmgMin() + "-" + player.getEquippedItem().getDmgMax() + "\nElement:");
+                    Image elementSprite = new Image(player.getEquippedItem().getElement().getSpriteURL());
+                    elementImg.setFill(new ImagePattern(elementSprite));
+                }
+            }
+            else if(player.getEquippedItem().getType()==Item.Type.Heal){
+                itemText.setText(player.getEquippedItem().getName()+"\nLeczy "+player.getEquippedItem().getDmgMin()+" punktów zdrowia");
+                elementImg.setFill(Color.TRANSPARENT);
+            }
         }
         else itemText.setText("");
     }
@@ -156,7 +170,9 @@ public class Game {
         itemText = new Text(player.getEquippedItem().getName()+"\nObrażenia: "+player.getEquippedItem().getDmgMin()+"-"+player.getEquippedItem().getDmgMax());
         itemText.setFill(Color.WHITE);
         itemText.setWrappingWidth(85);
-        infoBox.getChildren().addAll(hpText, itemText);
+        elementImg = new Rectangle(32, 32);
+        elementImg.setFill(Color.TRANSPARENT);
+        infoBox.getChildren().addAll(hpText, itemText, elementImg);
 
         addEnemies();
         addItem();

@@ -30,7 +30,7 @@ public class Main extends Application{
         btnGame.setOnAction(actionEvent -> {
             Scene gameScene = Game.getScene();
             mainStage.centerOnScreen();
-            mainStage.setTitle("Waow");
+            mainStage.setTitle("Elves vs Orcs");
             mainStage.setScene(gameScene);
 
         });
