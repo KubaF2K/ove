@@ -81,4 +81,4 @@
     2. Hibernate
     3. H2
 ## Proces uruchomienia aplikacji (krok po kroku)
-Wypakowywujemy plik ver1.7z, uruchamiamy evo.jar
+Wypakowywujemy pobrany plik z releases, uruchamiamy plik jar
