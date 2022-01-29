@@ -40,6 +40,7 @@ public class Main extends Application{
             mainStage.setTitle("Edytor");
             mainStage.setResizable(true);
             mainStage.setScene(editorScene);
+            mainStage.setMaximized(true);
         });
         Button btnExit = new Button("Wyjdz");
         btnExit.setOnAction(actionEvent -> Platform.exit());
