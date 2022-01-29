@@ -8,21 +8,31 @@
    1. Wykorzystać możliwości JavaFX
    2. Wykorzystać możliwości Hibernate
 ### Funkcjonalności:
-   1. Mozliwość dodawania własnych przeciwników, przedmiotów i elementów do gry
-   2. Mozliwość edycji domyślnych rekordów lub ich usunięcia
+   1. Możliwość dodawania własnych przeciwników, przedmiotów i elementów do gry
+   2. Możliwość edycji domyślnych rekordów lub ich usunięcia
+   3. Prezentacja możliwości stworzenia gry przy użyciu JavaFX
+   4. Możliwość obserwacji działania połączenia javy z bazą danych
 ### Interfejs:
 
    <details>
        <summary>Ekran główny</summary>
            Ekran główny zawiera 3 przyciski, służące do przejścia na ekran gry, ekran służący do edytowania oraz wyjście z aplikacji
+	
+![mainScreen](https://i.imgur.com/OeJ5abB.png)
    </details>
-	<details>
+   <details>
        <summary>Ekran gry</summary>
            Ekran gry zawiera informacje o wykonanych turach, przedmiocie aktualnie trzymanym przez gracza, główną planszę, oraz pasek z przedmiotami
+	
+![gameScreen](https://i.imgur.com/gtxSOjp.png)
    </details>
+   
    <details>
        <summary>Ekran edycji</summary>
            Ekran edycji są to wyświetlane w postaci tabeli dane pobierane z bazy danych z możliwościa dodania, edycji, oraz usunięcia rekordów
+	
+![editMain](https://i.imgur.com/Mgz1ZNj.png)
+![editEditor](https://i.imgur.com/dJOLPBG.png)
    </details>
          
 ### Baza danych
